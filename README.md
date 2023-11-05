@@ -1,5 +1,9 @@
-# Python Starter
+# Project SyncMeet
 
-Quickly get started with [Python](https://www.python.org/) using this starter! 
+## สมาชิก
 
-- If you want to upgrade Python, you can change the image in the [Dockerfile](./.codesandbox/Dockerfile).
+1. สุรียานี ดือราซอ 6310510026
+1. นิษฐา แก้วสมบัติ 6310611089
+1. พีระชัย เกรียงไกรชัยพร 6410685058 
+1. ธนากร ทองย้อย 6410615063
+1. ธนกฤต อิ้ววังโส 6410685124
