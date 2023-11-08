@@ -1,0 +1,25 @@
+{% extends 'mainPage/layout.html' %}
+
+{% load static %}
+{% block head %}
+<title>SyncMeet - Login</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap">
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+{% endblock head %}
+{% block body %}
+<div class="container ">
+    <h1>SyncMeet</h1>
+</div>
+<form method="post">
+    {% csrf_token %} 
+    <input class="form-input" type="text" placeholder="Username" id="username" name="username">
+    <input class="form-input" type="password" placeholder="Password" id="password" name="pass">
+    <button class="login-button" type="submit">Log In</button>
+    <div>
+        <a class="button-link" href="{% url 'signup' %}">Create a account</a>
+    </div>
+</form>
+{% endblock body %}
