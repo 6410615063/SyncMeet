@@ -22,7 +22,7 @@
                 <input class="form-control me-2" type="text" name="search" placeholder="Search Posts by Tag">
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
-            <img class="user-avatar" src="{% static 'users/default_avatar.jpg' %}">
+            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
 
@@ -33,7 +33,7 @@
                 <img class="group-avatar" src="{{ group.gprofile.url }}"
                     alt="{{ group.gname }} Profile">
                 {% else %}
-                <img class="group-avatar" src="{% static 'users/default_avatar.jpg' %}"
+                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}"
                     alt="Default Avatar">
                 {% endif %}                <h2 class="group-name">{{ group.gname }}</h2>
                 <p class="group-description">{{ group.gdescription }}</p>

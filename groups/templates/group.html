@@ -24,14 +24,14 @@
                 <input class="form-control me-2" type="text" name="gname" placeholder="Search Groups by Name">
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
-            <img class="user-avatar" src="{% static 'users/default_avatar.jpg' %}">
+            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
 
     <div class="page-content d-flex">
         <div class="user-side-bar">
             <div class="user-details">
-                <img class="user-avatar-content" src="{% static 'users/default_avatar.jpg' %}">
+                <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}">
                 <h2 class="user-name">{{ user.username }}</h2>
             </div>
             <br>
@@ -94,7 +94,7 @@
                             <img class="group-avatar-box" src="{{ group.gprofile.url }}"
                                 alt="{{ group.gname }} Profile">
                             {% else %}
-                            <img class="group-avatar-box" src="{% static 'users/default_avatar.jpg' %}"
+                            <img class="group-avatar-box" src="{% static 'groups/default_avatar.jpg' %}"
                                 alt="Default Avatar">
                             {% endif %}
                             <h5>{{ group.gname }}</h5>

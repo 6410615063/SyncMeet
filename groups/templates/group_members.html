@@ -20,7 +20,7 @@
             <a href="{% url 'group' %}">
                 <h1 class="app-name">SyncMeet</h1>
             </a>
-            <img class="user-avatar" src="{% static 'users/default_avatar.jpg' %}">
+            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
 
@@ -30,7 +30,7 @@
                 {% if group.gprofile %}
                 <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile">
                 {% else %}
-                <img class="group-avatar" src="{% static 'users/default_avatar.jpg' %}" alt="Default Avatar">
+                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar">
                 {% endif %}
                 <h2 class="group-name">{{ group.gname }}</h2>
                 <p class="group-description">{{ group.gdescription }}</p>
@@ -57,7 +57,7 @@
             <h1>Members</h1>
             {% for member in members %}
             <div class="group-member-box">
-                <img class="user-avatar" src="{% static 'users/default_avatar.jpg' %}">
+                <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
                 <div class="group-member-details">
                     <h5 class="group-member-name">{{ member.username }}</h5>
                     <p>name surname</p>
