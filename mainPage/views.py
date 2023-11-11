@@ -11,13 +11,14 @@ def IndexPage(request):
 def SignupPage(request):
     if request.method=='POST':
         username=request.POST.get('username')
-        email=request.POST.get('email')
         pass1=request.POST.get('password1')
         pass2=request.POST.get('password2')
-        if pass1!=pass2:
+        if pass1!=pass2 or pass1 is None or pass2 is None:
             return HttpResponse("Your password and confrom password are not Same!!")
         else:
-            my_user=User.objects.create_user(username,email,pass1)
+            if User.objects.filter(username = username).first():
+                return HttpResponse("Already have username!!")
+            my_user=User.objects.create_user(username,pass1)
             my_user.save()
             return redirect('login')
     return render (request,'mainPage/signup.html')
