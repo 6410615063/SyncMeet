@@ -17,6 +17,9 @@
     td {
         border: 2px solid black
     }
+    .busy {
+        background-color: red
+    }
 </style>
 <title>SyncMeet</title>
 {% endblock %}
@@ -46,13 +49,70 @@ schedule table
             <th> {{time}} </th>
         {% endfor %}
     </tr>
-    <tr> <th> Sunday </th> </tr>
-    <tr> <th> Monday </th> </tr>
-    <tr> <th> Tuesday </th> </tr>
-    <tr> <th> Wednesday </th> </tr>
-    <tr> <th> Thursday </th> </tr>
-    <tr> <th> Friday </th> </tr>
-    <tr> <th> Saturday </th> </tr>
+    <tr> 
+        <th> Sunday </th>
+        {% for slot in slot_sunday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Monday </th>
+        {% for slot in slot_monday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %}  
+    </tr>
+    <tr> <th> Tuesday </th> 
+        {% for slot in slot_tuesday %}
+            {% if slot %}
+                <th class=busy>  </th>
+            {% else %}
+               <th class=free> </th>
+            {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Wednesday </th> 
+        {% for slot in slot_wednesday %}
+            {% if slot %}
+                <th class=busy>  </th>
+            {% else %}
+                <th class=free> </th>
+            {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Thursday </th> 
+        {% for slot in slot_thursday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Friday </th> 
+        {% for slot in slot_friday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Saturday </th> 
+        {% for slot in slot_saturday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
 </table>
 
 Activity list(placeholder)

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from mainPage.models import Activity
 
+from mainPage.function import printTest, getTableSlot
 # Create your views here.
 
 
@@ -57,9 +58,17 @@ def GroupListPage(request):
 
 def UserSchedule(request):
     activity = Activity.objects.filter(user=request.user)
+    table_slot = getTableSlot(activity)
     timeRange = [str(hour) + ":00" for hour in range(24)]
     return render(request, 'mainPage/schedule_user.html', {
         'activity': activity,
-        'timeRange': timeRange
+        'timeRange': timeRange,
+        'slot_sunday': table_slot[0],
+        'slot_monday': table_slot[1],
+        'slot_tuesday': table_slot[2],
+        'slot_wednesday': table_slot[3],
+        'slot_thursday': table_slot[4],
+        'slot_friday': table_slot[5],
+        'slot_saturday': table_slot[6],
     }
     )
