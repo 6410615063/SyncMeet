@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+from mainPage.models import Activity
+
 # Create your views here.
 
 
@@ -54,4 +56,9 @@ def GroupListPage(request):
 
 
 def UserSchedule(request):
-    return render(request, 'mainPage/schedule_user.html')
+    activity = Activity.objects.filter(user=request.user)
+    return render(request, 'mainPage/schedule_user.html', {
+        'activity': activity,
+        'range': range(24)
+    }
+    )
