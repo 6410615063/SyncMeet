@@ -57,8 +57,9 @@ def GroupListPage(request):
 
 def UserSchedule(request):
     activity = Activity.objects.filter(user=request.user)
+    timeRange = [str(hour) + ":00" for hour in range(24)]
     return render(request, 'mainPage/schedule_user.html', {
         'activity': activity,
-        'range': range(24)
+        'timeRange': timeRange
     }
     )
