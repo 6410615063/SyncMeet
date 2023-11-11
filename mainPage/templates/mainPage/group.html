@@ -1,0 +1,29 @@
+{% extends 'mainPage/layout.html' %}
+
+{% block head %}
+<style>
+    body {
+        background-color: paleGreen;
+    }
+</style>
+<title>SyncMeet</title>
+{% endblock %}
+
+{% block body %}
+Welcome to group page!!
+</br> You should see this page after logging in
+</br> There should be:
+<ul>
+    <li> list of groups that user joined </li>
+    <li> search bar for joined group </li>
+    <li> user side bar(group, schedule, logout) </li>
+</ul>
+
+sidebar(Placeholder)
+<ul>
+    <li> Group(You are here) </li>
+    <li> <a href="{% url 'schedule_user' %}"> Schedule </a> </li>
+    <li> <a href="{% url 'logout' %}"> Log out </a> </li>
+</ul>
+
+{% endblock %}

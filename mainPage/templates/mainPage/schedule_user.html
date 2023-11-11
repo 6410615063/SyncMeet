@@ -1,0 +1,125 @@
+{% extends 'mainPage/layout.html' %}
+
+{% block head %}
+<style>
+    body {
+        background-color: paleGreen;
+    }
+    table {
+        border: 2px solid black
+    }
+    tr {
+        border: 2px solid black
+    }
+    th {
+        border: 2px solid black
+    }
+    td {
+        border: 2px solid black
+    }
+    .busy {
+        background-color: red
+    }
+</style>
+<title>SyncMeet</title>
+{% endblock %}
+
+{% block body %}
+Welcome to User schedule page!!
+</br> You should see this page after clicking "User schedule" in the user sidebar
+</br> There should be:
+<ul>
+    <li> normal 7-day schedule table </li>
+    <li> listed activity inside the appopriate schedule slot </li>
+    <li> edit schedule table </li>
+    <li> user side bar(group, schedule, logout) </li>
+</ul>
+
+sidebar(Placeholder)
+<ul>
+    <li> <a href="{% url 'group' %}"> Group </a> </li>
+    <li> Schedule(You are here) </li>
+    <li> <a href="{% url 'logout' %}"> Log out </a> </li>
+</ul>
+
+schedule table
+<table>
+    <tr> <th> Day </th> 
+        {% for time in timeRange %}
+            <th> {{time}} </th>
+        {% endfor %}
+    </tr>
+    <tr> 
+        <th> Sunday </th>
+        {% for slot in slot_sunday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Monday </th>
+        {% for slot in slot_monday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %}  
+    </tr>
+    <tr> <th> Tuesday </th> 
+        {% for slot in slot_tuesday %}
+            {% if slot %}
+                <th class=busy>  </th>
+            {% else %}
+               <th class=free> </th>
+            {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Wednesday </th> 
+        {% for slot in slot_wednesday %}
+            {% if slot %}
+                <th class=busy>  </th>
+            {% else %}
+                <th class=free> </th>
+            {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Thursday </th> 
+        {% for slot in slot_thursday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Friday </th> 
+        {% for slot in slot_friday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
+    <tr> <th> Saturday </th> 
+        {% for slot in slot_saturday %}
+        {% if slot %}
+            <th class=busy>  </th>
+        {% else %}
+           <th class=free> </th>
+        {% endif %}
+        {% endfor %} 
+    </tr>
+</table>
+
+Activity list(placeholder)
+<ul>
+    {% for act in activity %}
+        <li> {{act}} </li>
+    {% endfor%}
+</ul>
+
+{% endblock %}
