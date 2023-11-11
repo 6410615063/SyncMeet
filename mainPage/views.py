@@ -1,12 +1,16 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+
+from groups.models import GROUP_TAG, Group
 
 # Create your views here.
-@login_required(login_url='login')
-def IndexPage(request):
-    return render(request, 'mainPage/index.html')
+# @login_required(login_url='login')
+# def IndexPage(request):
+#     return render(request, 'mainPage/index.html')
 
 def SignupPage(request):
     if request.method=='POST':
@@ -30,7 +34,7 @@ def LoginPage(request):
         user=authenticate(request,username=username,password=pass1)
         if user is not None:
             login(request,user)
-            return redirect('index')
+            return redirect('group')
         else:
             return HttpResponse ("Username or Password is incorrect!!!")
 
@@ -42,3 +46,17 @@ def LogoutPage(request):
 
 def about(request):
     return render(request, 'mainPage/about.html')
+
+@login_required(login_url='login')
+def group(request):
+    if request.user.is_staff:
+        return HttpResponseRedirect(reverse('admin:index'))
+    
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login'))
+    
+    group_filter = request.GET.get('gname', '')
+    tag_filter = request.GET.get('gtag', '')
+
+    groups = Group.objects.filter(gmembers=request.user, gname__icontains=group_filter, gtag__icontains=tag_filter).order_by('gname')
+    return render(request, 'group.html', {'groups': groups, 'GROUP_TAG': GROUP_TAG})
