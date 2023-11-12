@@ -23,17 +23,17 @@ def create_group(request):
             new_group.gmembers.add(request.user)
 
             return redirect('group')
-    return render(request, 'create_group.html', {'GROUP_TAG': GROUP_TAG})
+    return render(request, 'groups/create_group.html', {'GROUP_TAG': GROUP_TAG})
 
 def group_schedule(request, group_id):
     group = get_object_or_404(Group, id=group_id)
-    return render(request, 'group_schedule.html', {'group': group})
+    return render(request, 'groups/group_schedule.html', {'group': group})
 
 def group_members(request, group_id):
     group = get_object_or_404(Group, id=group_id)
     members = group.gmembers.all()
 
-    return render(request, 'group_members.html', {'group': group, 'members': members})
+    return render(request, 'groups/group_members.html', {'group': group, 'members': members})
 
 def leave_group(request, group_id):
     group = get_object_or_404(Group, id=group_id)
@@ -49,12 +49,11 @@ def leave_group(request, group_id):
     return HttpResponseForbidden("Invalid request.")
 
 def post(request, group_id):
-    search_query = request.GET.get('search', '')
     tag_filter = request.GET.get('ptag', '')
 
     group = get_object_or_404(Group, id=group_id)
     posts = Post.objects.filter(pgroup_id=group_id, ptag__icontains=tag_filter).order_by('-pcreated_on')
-    return render(request, 'post.html', {'posts': posts, 'POST_TAG': POST_TAG, 'group': group})
+    return render(request, 'groups/post.html', {'posts': posts, 'POST_TAG': POST_TAG, 'group': group})
 
 def create_post(request, group_id):
     if request.method == 'POST':
@@ -72,7 +71,7 @@ def create_post(request, group_id):
                 pgroup=group
             )
             return redirect('post', group_id=group.id)
-    return render(request, 'create_post.html', {'POST_TAG': POST_TAG, 'group': group})
+    return render(request, 'groups/create_post.html', {'POST_TAG': POST_TAG, 'group': group})
 
 def delete_post(request, group_id):
     if request.method == 'POST':
