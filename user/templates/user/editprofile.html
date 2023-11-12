@@ -1,0 +1,55 @@
+{% extends 'user/layout.html' %}
+{% block body %}
+<body class="h-100">
+
+<section>
+    <div class="text-center mt-4">
+      <p class="header">Edit Profile</p>
+      <div class="container w-50">
+        <form class="mt-5" action="{% url 'user:edit_profile' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-row text-center" style="display: flex; justify-content: center;">
+            <div class="form-group">
+                <img src="{{ user_info.profile_image.url }}" class="profileimg">
+                <!-- <p>Update profile picture</p> -->
+                <!-- {{ form.as_p }} -->
+                <input class="form-control" type="file" name="images" accept="image/png, image/jpeg, image/jpg">
+            </div>
+          </div>
+          <div class="form-group text-left">
+            <label for="inputAddress">Username</label>
+            <input disabled type="username" class="form-control" id="username" name="username" value="{{ user.username }}">
+          </div>
+          <div class="form-row text-left">
+            <div class="form-group col-md-6">
+              <label for="inputEmail4">First Name</label>
+              <input required type="text" class="form-control" id="firstname" name="firstname" value="{{ user.first_name }}">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputPassword4">Last Name</label>
+              <input required type="text" class="form-control" id="lastname" name="lastname" value="{{ user.last_name }}">
+            </div>
+          </div>
+          <div class="form-group text-left">
+            <label for="inputAddress">Email</label>
+            <input disabled type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+          </div>
+          <div class="form-group text-left">
+            <label for="inputAddress2">Phone Number</label>
+            <input disabled type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ user_info.phone_number }}">
+          </div>
+
+          <div class="form-group text-left">
+            <label for="inputAddress">Sir Name</label>
+            <input disabled type="text" class="form-control" id="sir_name" name="sir_name" value="{{ user_info.sir_name }}">
+          </div>
+          
+          
+          <button type="submit" class="btn text-light" style="background-color: #3F4682;">Update</button>
+        </form> 
+      </div>
+    </div>
+  </section>
+  <br><br>
+</body>
+{% endblock %}
