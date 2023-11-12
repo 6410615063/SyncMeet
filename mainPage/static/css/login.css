@@ -137,3 +137,10 @@ input{
 .button-link:hover {
     background-color: #46b330;
 }
+
+input[type="text"]
+{
+    font-family: 'Poppins';
+    font-size: medium;
+    font-weight: 600;
+}

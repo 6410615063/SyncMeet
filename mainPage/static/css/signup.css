@@ -116,3 +116,10 @@ button{
     margin-top: 20px;
     text-align: center;
 }
+
+input[type="text"]
+{
+    font-family: 'Poppins';
+    font-size: medium;
+    font-weight: 600;
+}
