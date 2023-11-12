@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+
+    <h1>User Profile</h1>
+
+    <p>Username: {{ request.user.username }}</p>
+    <p>Account UID: {{ userInfo.account_UID }}</p>
+    <p>Sir Name: {{ userInfo.sir_name }}</p>
+    <p>Gender: {{ userInfo.get_gender_display }}</p>
+    <p>Age: {{ userInfo.age }}</p>
+
+    <p>Contact:
+    <a href="{{  userInfo.contact }}" target="_blank">Facebook</a>
+    </p>
+
+    <!-- You can check if a profile image exists before displaying it -->
+    {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="Profile Image">
+    {% else %}
+        <p>No profile image available</p>
+    {% endif %}
+
+</body>
+</html>
