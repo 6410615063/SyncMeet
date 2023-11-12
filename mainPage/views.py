@@ -26,7 +26,7 @@ def SignupPage(request):
         else:
             if User.objects.filter(username = username).first():
                 return HttpResponse("Already have username!!")
-            my_user=User.objects.create_user(username,pass1)
+            my_user=User.objects.create_user(username=username, password=pass1)
             my_user.save()
             return redirect('login')
     return render(request, 'mainPage/signup.html')
