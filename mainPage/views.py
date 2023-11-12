@@ -72,7 +72,7 @@ def group(request):
     tag_filter = request.GET.get('gtag', '')
 
     groups = Group.objects.filter(gmembers=request.user, gname__icontains=group_filter, gtag__icontains=tag_filter).order_by('gname')
-    return render(request, 'group.html', {'groups': groups, 'GROUP_TAG': GROUP_TAG})
+    return render(request, 'groups/group.html', {'groups': groups, 'GROUP_TAG': GROUP_TAG})
 
 def UserSchedule(request):
     activity = Activity.objects.filter(user=request.user)
