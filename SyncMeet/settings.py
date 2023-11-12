@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainPage',
     'groups',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -126,4 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
+    "https://396dgt-8000.csb.app",
 ]
