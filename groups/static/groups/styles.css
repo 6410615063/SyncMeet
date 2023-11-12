@@ -300,3 +300,41 @@ img {
 .add-member-form input {
     margin-right: 1rem;
 }
+
+/* profile */
+
+.profile {
+    background-color: #F1F0F5;
+    width: 500px;
+    margin: 4rem;
+    display: block;
+}
+
+.profile h1 {
+    color: #483D8E;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.user-avatar-profile {
+    width: 150px;
+}
+
+.user-profile-content {
+    background-color: #483D8E;
+    color: #FFFFFF;
+    border-radius: 30px;
+    padding: 2rem;
+    font-size: 20px;
+}
+
+/* schedule */
+.schedule h1 {
+    font-size: 50px;
+    text-align: center;
+    color: #483D8E;
+}
+.schedule {
+    margin: .5rem;
+    color: #483D8E;
+}
