@@ -22,7 +22,11 @@ class UserTest(TestCase):
         c = Client()
         response = c.post(reverse('signup'),{'username':'test2','password1':'12345'})
         self.assertEqual(response.status_code, 200)
-    
+
+    def test_InValidCreateUser_PasswordDontMatch(self):
+        c = Client()
+        response = c.post(reverse('signup'),{'username':'test2','password1':'12345', 'password2':'123456'})
+        self.assertEqual(response.status_code, 200)
     
     def test_InValidCreateUser_MissingUsername(self):
         c = Client()
@@ -43,6 +47,11 @@ class UserTest(TestCase):
     def test_InvalidUserlogin_WrongUsername(self):
         c = Client()
         response = c.post(reverse('login'),{'username':'test5','pass':'12345'})
+        self.assertEqual(response.status_code, 200)
+    
+    def test_InvalidUserlogin_WrongPassword(self):
+        c = Client()
+        response = c.post(reverse('login'),{'username':'test1','pass':'123456'})
         self.assertEqual(response.status_code, 200)
 
     def test_Logout(self):
