@@ -20,10 +20,6 @@
             <a href="{% url 'group' %}">
                 <h1 class="app-name">SyncMeet</h1>
             </a>
-            <form class="d-flex" method="get" action="{% url 'group' %}">
-                <input class="form-control me-2" type="text" name="gname" placeholder="Search Groups by Name">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form>
             <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
