@@ -22,10 +22,14 @@ def SignupPage(request):
         pass1=request.POST.get('password1')
         pass2=request.POST.get('password2')
         if pass1!=pass2 or pass1 is None or pass2 is None:
-            return HttpResponse("Your password and confrom password are not Same!!")
+            return render(request, 'mainPage/signup.html', {
+                'message': 'Your password and confrom password are not same!'
+            })
         else:
             if User.objects.filter(username = username).first():
-                return HttpResponse("Already have username!!")
+                return render(request, 'mainPage/signup.html', {
+                'message': 'Already have username!'
+                })
             my_user=User.objects.create_user(username=username, password=pass1)
             my_user.save()
             return redirect('login')
@@ -41,7 +45,9 @@ def LoginPage(request):
             login(request,user)
             return redirect('group')
         else:
-            return HttpResponse("Username or Password is incorrect!!!")
+            return render(request, 'mainPage/login.html', {
+                'message': 'Username or Password is Incorrect!'
+            })
 
     return render(request, 'mainPage/login.html')
 
