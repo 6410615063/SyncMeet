@@ -30,8 +30,6 @@ class UserTest(TestCase):
     
     def test_InValidCreateUser_MissingUsername(self):
         c = Client()
-        #response = c.post(reverse('signup'),{'password1':'12345', 'password2':'12345'})
-        #self.assertEqual(response.status_code, 200)
         self.assertRaises(ValueError, c.post, reverse('signup'),{'password1':'12345', 'password2':'12345'})
 
     def test_InValidCreateUser_DuplicateUsername(self):
@@ -62,8 +60,6 @@ class UserTest(TestCase):
     
     def test_UserSchedule_notLogin(self):
         c = Client()
-        #response = c.get(reverse('schedule_user'))
-        #self.assertEqual(response.status_code, 200)
         self.assertRaises(TypeError, c.get, reverse('schedule_user'))
 
     def test_UserSchedule_empty(self):
@@ -86,6 +82,5 @@ class UserTest(TestCase):
         user = User.objects.create_user(username='test6', password='12345')
         c.post(reverse('login'),{'username':'test6','pass':'12345'})
         Activity.objects.create(user=user, activityId=1, start=datetime.datetime(2020, 5, 5, 10), start_day='Monday', end=datetime.datetime(2020, 5, 6, 10), end_day='Tuesday')
-        #Activity.objects.create(user=user, activityId=1, start=datetime.datetime(2020, 5, 5, 10), start_day='Monday', end=datetime.datetime(2020, 5, 6, 10), end_day='Tuesday')
         self.assertRaises(IntegrityError, Activity.objects.create, user=user, activityId=1, start=datetime.datetime(2020, 5, 5, 10), start_day='Monday', end=datetime.datetime(2020, 5, 6, 10), end_day='Tuesday')
         
