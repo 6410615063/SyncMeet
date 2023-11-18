@@ -44,9 +44,10 @@ class UserInfo(models.Model):
 class Friend(models.Model):
     user_id = models.ForeignKey(
         UserInfo, on_delete=models.CASCADE, related_name='user')
+
     friend_id = models.ForeignKey(
         UserInfo, on_delete=models.CASCADE, related_name='friend')
     status = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{ self.friend_id.user_id.username } is { self.user_id.user_id.username }'s friend"
+        return f"{ self.friend_id.account_UID.username } is { self.user_id.account_UID.username }'s friend"
