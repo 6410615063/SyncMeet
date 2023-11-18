@@ -90,3 +90,35 @@ def UserSchedule(request):
         'slot_saturday': table_slot[6],
     }
     )
+
+def EditSchedule(request):
+    activity = Activity.objects.filter(user=request.user)
+
+    if request.method=='POST':
+        start_day=request.POST.get('start_day')
+        start_time=request.POST.get('start_time')
+        end_day=request.POST.get('end_day')
+        end_time=request.POST.get('end_time')
+        id = Activity.objects.last().activityId + 1
+        while Activity.objects.filter(activityId=id):
+            id += 1
+        new_activity = Activity.objects.create(user=request.user, activityId=id,
+                                start_day=start_day, start=start_time,
+                                end_day=end_day, end=end_time)
+        new_activity.save()
+    #     if pass1!=pass2 or pass1 is None or pass2 is None:
+    #         return render(request, 'mainPage/signup.html', {
+    #             'message': 'Your password and confrom password are not same!'
+    #         })
+    #     else:
+    #         if User.objects.filter(username = username).first():
+    #             return render(request, 'mainPage/signup.html', {
+    #             'message': 'Already have username!'
+    #             })
+    #         my_user=User.objects.create_user(username=username, password=pass1)
+    #         my_user.save()
+    #         return redirect('login')
+    return render(request, 'mainPage/edit_schedule.html', {
+        'activity': activity,
+        }
+        )

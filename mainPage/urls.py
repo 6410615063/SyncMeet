@@ -9,5 +9,5 @@ urlpatterns = [
     path('about', views.AboutPage, name="about"),
     path('group', views.group, name="group"),
     path('schedule', views.UserSchedule, name="schedule_user"),
-
+    path('schedule/edit_schedule', views.EditSchedule, name="edit_schedule"),
 ]
