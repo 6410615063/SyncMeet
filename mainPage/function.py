@@ -24,7 +24,7 @@ def getTableSlot(activities):
         start_hour = activity.start.hour
         end_hour = activity.end.hour
 
-        if((start_day_num == end_day_num) and (start_hour < end_hour)):
+        if((start_day_num == end_day_num) and (start_hour <= end_hour)):
             for hour in range(start_hour, min(23, end_hour) + 1, 1):
                 table_slot[start_day_num][hour] += 1
         else:
