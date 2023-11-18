@@ -106,19 +106,11 @@ def EditSchedule(request):
                                 start_day=start_day, start=start_time,
                                 end_day=end_day, end=end_time)
         new_activity.save()
-    #     if pass1!=pass2 or pass1 is None or pass2 is None:
-    #         return render(request, 'mainPage/signup.html', {
-    #             'message': 'Your password and confrom password are not same!'
-    #         })
-    #     else:
-    #         if User.objects.filter(username = username).first():
-    #             return render(request, 'mainPage/signup.html', {
-    #             'message': 'Already have username!'
-    #             })
-    #         my_user=User.objects.create_user(username=username, password=pass1)
-    #         my_user.save()
-    #         return redirect('login')
     return render(request, 'mainPage/edit_schedule.html', {
         'activity': activity,
         }
         )
+
+def RemoveActivity(request, activityId):
+    Activity.objects.filter(user=request.user, activityId=activityId).delete()
+    return redirect('edit_schedule')

@@ -10,4 +10,7 @@ urlpatterns = [
     path('group', views.group, name="group"),
     path('schedule', views.UserSchedule, name="schedule_user"),
     path('schedule/edit_schedule', views.EditSchedule, name="edit_schedule"),
+    path('schedule/edit_schedule/<int:activityId>/remove', 
+            views.RemoveActivity, name="remove_activity"),
+
 ]
