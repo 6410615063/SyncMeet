@@ -13,13 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'groups/styles.css' %}">
 </head>
-
 <body>
     <nav class="navbar bg-light">
         <div class="container-fluid">
-            <a href="{% url 'group' %}">
-                <h1 class="app-name">SyncMeet</h1>
-            </a>
+            <a href="{% url 'group' %}"><h1 class="app-name">SyncMeet</h1></a>
             <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
@@ -36,49 +33,56 @@
                 <br>
                 <h2 class="group-name">{{ group.gname }}</h2>
                 <p class="group-description">"{{ group.gdescription }}"</p>
-                <a class="btn btn-secondary" href="{% url 'edit_group' group_id=group.id %}" class="edit-group-button">Edit Group</a>
-            </div>
+                </div>
             <br>
             <div class="group-menu-bar">
                 <h4><a href="{% url 'group_schedule' group_id=group.id %}">Schedule</a></h4>
                 <h4><a href="{% url 'post' group_id=group.id %}">Post</a></h4>
                 <h4><a href="{% url 'group_members' group_id=group.id %}">Member</a></h4>
                 <h4><a href="{% url 'logout' %}">Logout</a></h4>
-                <br>
-                <form id="leave-group-{{ group.id }}" method="post" action="{% url 'leave_group' group_id=group.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="group_id" value="{{ group.id }}">
-                    <button class="btn btn-danger" type="submit" onclick="confirmDelete('{{ group.id }}')"
-                        style="margin-left: 1rem; font-size: 18px;">
-                        Leave Group
-                    </button>
-                </form>
             </div>
         </div>
-
-        <div class="group-members">
-            <h1>Members</h1>
-            {% for member in members %}
-            <div class="group-member-box">
-                <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
-                <div class="group-member-details">
-                    <h5 class="group-member-name">{{ member.username }}</h5>
-                    <p>name surname</p>
-                    <p>email:</p>
-                </div>
+        <div class="edit-group">
+        <h1>Edit Group</h1>
+        <br>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group d-flex">
+                <label for="gname">Name</label>
+                <input class="form-control" type="text" id="gname" name="gname" value="{{ group.gname }}" required>
             </div>
-            {% endfor %}
-        </div>
+            <br>
+    
+            <div class="form-group d-flex">
+                <label for="gdescription">Description</label>
+                <textarea class="form-control" id="gdescription" name="gdescription" required>{{ group.gdescription }}</textarea>
+            </div>   
+            <br>     
+    
+            <div class="form-group d-flex">
+                <label for="gtag">Tag</label>
+                <select class="form-control me-2" id="gtag" name="gtag">
+                    {% for tag, tag_display in GROUP_TAG %}
+                        <option value="{{ tag }}" {% if tag == group.gtag %}selected{% endif %}>{{ tag_display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+    
+            <div class="form-group d-flex">
+                <label for="gprofile">Group Profile</label>
+                <input class="form-control" type="file" id="gprofile" name="gprofile" style="height: min-content;">
+            </div>
+            <br>
+    
+            {% if group.gprofile %}
+                <img src="{{ group.gprofile.url }}" alt="Group Profile">
+            {% endif %}
+            <br>
+            <br>
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+        </form>
+        <a class="btn btn-danger" href="{% url 'group_schedule' group_id=group.id %}" style="margin-top: .5rem;">Cancel</a>
     </div>
-
-    <script>
-        function confirmDelete(groupId) {
-            var confirmation = confirm("Are you sure you want to leave this group?");
-            if (confirmation) {
-                document.getElementById('leave-group-' + groupId).submit();
-            }
-        }
-    </script>
 </body>
-
 </html>
