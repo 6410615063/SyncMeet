@@ -128,6 +128,8 @@ def add_friend(request):
             # สร้างเพื่อน
             friend, created = Friend.objects.get_or_create(
                 user_id=user_info, friend_id=friend_info, defaults={'status': True})
+            friend, created = Friend.objects.get_or_create(
+                user_id=friend_info, friend_id=user_info, defaults={'status': True})
 
             if created:
                 context['message'] = 'Friend added successfully!'
