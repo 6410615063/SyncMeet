@@ -83,18 +83,19 @@ def friend_list(request, user_id):
         'all_friend': all_friend,
     })
 
+
 def change_password(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('user:signin'))
-    if request.method=='POST':
+    if request.method == 'POST':
         form = PasswordChangingForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
             return redirect('user:profile')
-        else :
+        else:
             form_class = PasswordChangingForm(user=request.user)
-            return render(request, 'user/changepassword.html', {'form': form_class,'message':"Invalid password"})
+            return render(request, 'user/changepassword.html', {'form': form_class, 'message': "Invalid password"})
     else:
         form_class = PasswordChangingForm(user=request.user)
         return render(request, 'user/changepassword.html', {'form': form_class})
