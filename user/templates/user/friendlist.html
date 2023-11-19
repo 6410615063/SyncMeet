@@ -26,7 +26,7 @@
     <div class="page-content d-flex">
         <div class="user-side-bar">
             <div class="user-details">
-                <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}">
+                <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 120px; height: 120px;">
                 <h2 class="user-name">{{ user.username }}</h2>
             </div>
             <br>
@@ -48,9 +48,9 @@
 
             <label for="friend_account_UID">Friend Account UID:</label>
             <input type="number" class="form-control" id="friend_account_UID" name="friend_account_UID" >
-            
+            <br>
 
-            <input type="submit" value="Add Friend">
+            <input class="btn btn-primary" type="submit" value="Add Friend">
             </form>
             <p>{{ message }}</p>
 
