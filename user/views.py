@@ -74,14 +74,16 @@ def friend_list(request, user_id):
 
     user = User.objects.get(username=request.user.username)
     user_info = UserInfo.objects.get(user_id=user)
-    context = {'userInfo': user_info}
 
     userInfo = UserInfo.objects.get(account_UID=user_id)
     all_friend = Friend.objects.filter(user_id=userInfo, status=True)
 
-    return render(request, 'user/friendlist.html', {
+    context = {
+        'userInfo': user_info,
         'all_friend': all_friend,
-    })
+    }
+
+    return render(request, 'user/friendlist.html', context)
 
 
 def change_password(request):
@@ -129,6 +131,7 @@ def add_friend(request):
             # สร้างเพื่อน
             friend, created = Friend.objects.get_or_create(
                 user_id=user_info, friend_id=friend_info, defaults={'status': True})
+
             friend, created = Friend.objects.get_or_create(
                 user_id=friend_info, friend_id=user_info, defaults={'status': True})
 
