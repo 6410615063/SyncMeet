@@ -2,7 +2,9 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.urls import reverse
 from user.models import UserInfo, Friend
+from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
+from user.urls import *
 # Create your tests here.
 
 
@@ -96,20 +98,57 @@ class UserTest(TestCase):
 
     def test_add_friend_already_friends(self):
 
-        Friend.objects.create(user_id=self.userInfo, friend_id=self.friendUserInfo, status=True)
-        Friend.objects.create(user_id=self.friendUserInfo, friend_id=self.userInfo, status=True)
+        Friend.objects.create(user_id=self.userInfo,
+                              friend_id=self.friendUserInfo, status=True)
+        Friend.objects.create(user_id=self.friendUserInfo,
+                              friend_id=self.userInfo, status=True)
 
         self.client.force_login(self.user)
-        data = {'user_account_UID': self.userInfo.account_UID, 'friend_account_UID': self.friendUserInfo.account_UID}
+        data = {'user_account_UID': self.userInfo.account_UID,
+                'friend_account_UID': self.friendUserInfo.account_UID}
         response = self.client.post(reverse('user:add_friend'), data)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/friendlist.html')
-        self.assertContains(response, f'{self.friendUserInfo.user_id.username} is already a friend of {self.userInfo.user_id.username}')
-    
+        self.assertContains(
+            response, f'{self.friendUserInfo.user_id.username} is already a friend of {self.userInfo.user_id.username}')
+
     def test_add_friend_nonexistent_user(self):
         self.client.force_login(self.user)
-        data = {'user_account_UID': self.userInfo.account_UID, 'friend_account_UID': 999}
+        data = {'user_account_UID': self.userInfo.account_UID,
+                'friend_account_UID': 999}
         response = self.client.post(reverse('user:add_friend'), data)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/friendlist.html')
         self.assertContains(response, 'User UID not found!')
+
+    def test_edit_profile_view(self):
+
+        self.user = User.objects.create_user(
+            username='testuser2', password='testpassword')
+        self.client.login(username='testuser2', password='testpassword')
+        self.user_info = UserInfo.objects.create(
+            user_id=self.user, account_UID=000, sir_name='Test Sir', gender='male', age=25, contact='-')
+
+        # สร้างข้อมูล POST request
+        post_data = {
+            'username': 'new_username',
+            'sir_name': 'New Sir Name',
+            'gender': 'Male',
+            'age': 30,
+            'contact': '-',
+        }
+
+        # ทำการ request ไปยัง edit_profile view ด้วยข้อมูล POST
+        response = self.client.post(reverse('user:edit_profile'), post_data)
+
+        # ตรวจสอบว่าหน้าถูก redirect ไปที่หน้าหลักหรือไม่
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/')
+
+        # ทดสอบการแก้ไขข้อมูลโปรไฟล์
+        updated_user_info = UserInfo.objects.get(user_id=self.user)
+
+        self.assertEqual(updated_user_info.sir_name, 'New Sir Name')
+        self.assertEqual(updated_user_info.gender, 'Male')
+        self.assertEqual(updated_user_info.age, 30)
+        self.assertEqual(updated_user_info.contact, '-')
