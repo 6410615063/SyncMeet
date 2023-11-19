@@ -104,11 +104,14 @@
                         <h5>{{ post.ptitle }}</h5>
                         <p>{{ post.pcontent }}</p>
                         <p>Tag: {{ post.ptag }}</p>
-                        <form id="delete-post-{{ post.id }}" action="{% url 'delete_post' group_id=post.pgroup_id %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="post_id" value="{{ post.id }}">
-                            <button class="btn btn-danger delete-btn" type="button" onclick="confirmDelete('{{ post.id }}')">Delete</button>
-                        </form>
+                        <div class="d-flex">
+                            <a class="btn btn-primary" href="{% url 'edit_post' group_id=group.id post_id=post.id %}">Edit Post</a>
+                            <form id="delete-post-{{ post.id }}" action="{% url 'delete_post' group_id=post.pgroup_id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <button class="btn btn-danger delete-btn" type="button" onclick="confirmDelete('{{ post.id }}')">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}

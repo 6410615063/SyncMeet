@@ -354,3 +354,20 @@ img {
 .edit-group label {
     margin-right: .5rem;
 }
+
+
+/* edit post */
+.edit-post h1 {
+    font-size: 50px;
+    text-align: center;
+    color: #483D8E;
+}
+.edit-post {
+    margin-left: 10rem;
+    padding: 2rem;
+    font-size: 20px;
+}
+
+.edit-post label {
+    margin-right: .5rem;
+}

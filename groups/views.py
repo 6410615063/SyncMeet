@@ -103,6 +103,34 @@ def create_post(request, group_id):
             return redirect('post', group_id=group.id)
     return render(request, 'groups/create_post.html', {'POST_TAG': POST_TAG, 'group': group})
 
+@login_required
+def edit_post(request, group_id, post_id):
+    group = get_object_or_404(Group, id=group_id)
+    post = get_object_or_404(Post, id=post_id)
+
+    if not post.pauthor == request.user:
+        return HttpResponseForbidden("You are not the author of this post.")
+
+    if request.method == 'POST':
+        ptitle = request.POST.get('ptitle', '')
+        pcontent = request.POST.get('pcontent', '')
+        ptag = request.POST.get('ptag', '')
+
+        if ptitle:
+            post.ptitle = ptitle
+        if pcontent:
+            post.pcontent = pcontent
+        if ptag:
+            post.ptag = ptag
+
+        post.save()
+
+        messages.success(request, "Post has been updated successfully.")
+        return redirect('post', group_id=group_id)
+
+    return render(request, 'groups/edit_post.html', {'group': group, 'post': post,  'POST_TAG': POST_TAG})
+
+
 def delete_post(request, group_id):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
