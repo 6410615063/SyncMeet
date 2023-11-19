@@ -48,6 +48,36 @@ def leave_group(request, group_id):
 
     return HttpResponseForbidden("Invalid request.")
 
+@login_required
+def edit_group(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+
+    if not group.is_creator(request.user):
+        return HttpResponseForbidden("You are not the creator of this group.")
+
+    if request.method == 'POST':
+        gname = request.POST['gname']
+        gdescription = request.POST['gdescription']
+        gtag = request.POST['gtag']
+        gprofile = request.FILES.get('gprofile')
+
+        if gname:
+            group.gname = gname
+        if gdescription:
+            group.gdescription = gdescription
+        if gtag:
+            group.gtag = gtag
+        if gprofile:
+            group.gprofile = gprofile
+
+        group.save()
+
+        messages.success(request, "Group details have been updated successfully.")
+        return redirect('group')
+
+    return render(request, 'groups/edit_group.html', {'group': group, 'GROUP_TAG': GROUP_TAG})
+
+
 def post(request, group_id):
     tag_filter = request.GET.get('ptag', '')
 

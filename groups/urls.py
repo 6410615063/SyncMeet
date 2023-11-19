@@ -9,5 +9,6 @@ urlpatterns = [
     path('group/<int:group_id>/create_post/', views.create_post, name='create_post'),
     path('group/<int:group_id>/delete_post/', views.delete_post, name='delete_post'),
     path('group/<int:group_id>/leave/', views.leave_group, name='leave_group'),
+    path('edit_group/<int:group_id>/', views.edit_group, name='edit_group'),    
     path('user/', include('user.urls')),
 ]
