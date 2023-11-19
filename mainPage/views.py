@@ -9,7 +9,7 @@ from groups.models import GROUP_TAG, Group
 
 from mainPage.models import Activity
 
-from mainPage.function import printTest, getTableSlot
+from mainPage.function import getTableSlot
 # Create your views here.
 import random
 

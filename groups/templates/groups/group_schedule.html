@@ -45,11 +45,87 @@
             </div>
         </div>
 
-        <div class="schedule">
+        <div class="schedule" style="text-align: center;">
             <h1>Group Schedule</h1>
-        </div>
-
-        
+            <table class="table table-light">
+                <tr>
+                    <th> Day </th>
+                    {% for time in timeRange %}
+                    <th> {{time}} </th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th> Sunday </th>
+                    {% for slot in slot_sunday %}
+                    {% if slot %}
+                    <th class=busy style="background-color: Red;"> </th>
+                    {% else %}
+                    <th class=free> </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th> Monday </th>
+                    {% for slot in slot_monday %}
+                    {% if slot %}
+                    <th class=busy style="background-color: Red;"> </th>
+                    {% else %}
+                    <th class=free> </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th> Tuesday </th>
+                    {% for slot in slot_tuesday %}
+                    {% if slot %}
+                    <th class=busy style="background-color: Red;"> </th>
+                    {% else %}
+                    <th class=free> </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th> Wednesday </th>
+                    {% for slot in slot_wednesday %}
+                    {% if slot %}
+                    <th class=busy style="background-color: Red;"> </th>
+                    {% else %}
+                    <th class=free> </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th> Thursday </th>
+                    {% for slot in slot_thursday %}
+                    {% if slot %}
+                    <th class=busy style="background-color: Red;"> </th>
+                    {% else %}
+                    <th class=free> </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th> Friday </th>
+                    {% for slot in slot_friday %}
+                    {% if slot %}
+                    <th class=busy style="background-color: Red;"> </th>
+                    {% else %}
+                    <th class=free> </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th> Saturday </th>
+                    {% for slot in slot_saturday %}
+                    {% if slot %}
+                    <th class=busy style="background-color: Red;"> </th>
+                    {% else %}
+                    <th class=free> </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>        
     </div>
 </body>
 
