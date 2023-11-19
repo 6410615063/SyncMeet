@@ -371,3 +371,19 @@ img {
 .edit-post label {
     margin-right: .5rem;
 }
+
+/* change password */
+.change-password h1 {
+    font-size: 50px;
+    text-align: center;
+    color: #483D8E;
+}
+.change-password {
+    margin-left: 10rem;
+    padding: 2rem;
+    font-size: 20px;
+}
+
+.change-password label {
+    margin-right: .5rem;
+}
