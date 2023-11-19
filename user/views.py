@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from user.models import *
 from django.http import HttpResponseRedirect, HttpResponse
@@ -17,6 +18,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView
 from user.form import PasswordChangingForm
+
+from django.contrib import messages
 
 account_sid = "AC3607d951e9f16551ff392e66a5086414"
 auth_token = "4d251cb5cbb2b470be11874ace98e0f5"
@@ -69,6 +72,10 @@ def friend_list(request, user_id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('user:signin'))
 
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+    context = {'userInfo': user_info}
+
     userInfo = UserInfo.objects.get(account_UID=user_id)
     all_friend = Friend.objects.filter(user_id=userInfo, status=True)
 
@@ -91,3 +98,49 @@ def change_password(request):
     else:
         form_class = PasswordChangingForm(user=request.user)
         return render(request, 'user/changepassword.html', {'form': form_class})
+    # เพิ่มข้อมูลเพิ่มเติมใน context
+    context['all_friend'] = all_friend
+
+    return render(request, 'user/friendlist.html', context)
+
+
+def add_friend(request):
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+    context = {'userInfo': user_info}
+
+    if request.method == 'POST':
+        user_account_UID = request.POST.get(
+            'user_account_UID')  # เลข account_UID ของผู้ใช้
+        # เลข account_UID ของเพื่อนที่ต้องการเพิ่ม
+        friend_account_UID = request.POST.get('friend_account_UID')
+
+        userInfo = UserInfo.objects.get(account_UID=user_account_UID)
+        all_friend = Friend.objects.filter(user_id=userInfo, status=True)
+
+        # เพิ่มข้อมูลเพิ่มเติมใน context
+        context['all_friend'] = all_friend
+
+        try:
+            user_info = UserInfo.objects.get(account_UID=user_account_UID)
+            friend_info = UserInfo.objects.get(account_UID=friend_account_UID)
+
+            # สร้างเพื่อน
+            friend, created = Friend.objects.get_or_create(
+                user_id=user_info, friend_id=friend_info, defaults={'status': True})
+
+            if created:
+                context['message'] = 'Friend added successfully!'
+
+            else:
+                context['message'] = f'{friend_info.user_id.username} is already a friend of {user_info.user_id.username}'
+
+        except UserInfo.DoesNotExist:
+            context['message'] = 'User UID not found!'
+
+        except Friend.MultipleObjectsReturned:
+            context['message'] = 'Multiple friends found! Something went wrong.'
+    else:
+        context['message'] = 'Invalid request method!'
+
+    return render(request, 'user/friendlist.html', context)

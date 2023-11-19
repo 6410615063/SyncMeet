@@ -48,6 +48,36 @@ def leave_group(request, group_id):
 
     return HttpResponseForbidden("Invalid request.")
 
+@login_required
+def edit_group(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+
+    if not group.is_creator(request.user):
+        return HttpResponseForbidden("You are not the creator of this group.")
+
+    if request.method == 'POST':
+        gname = request.POST['gname']
+        gdescription = request.POST['gdescription']
+        gtag = request.POST['gtag']
+        gprofile = request.FILES.get('gprofile')
+
+        if gname:
+            group.gname = gname
+        if gdescription:
+            group.gdescription = gdescription
+        if gtag:
+            group.gtag = gtag
+        if gprofile:
+            group.gprofile = gprofile
+
+        group.save()
+
+        messages.success(request, "Group details have been updated successfully.")
+        return redirect('group')
+
+    return render(request, 'groups/edit_group.html', {'group': group, 'GROUP_TAG': GROUP_TAG})
+
+
 def post(request, group_id):
     tag_filter = request.GET.get('ptag', '')
 
@@ -72,6 +102,34 @@ def create_post(request, group_id):
             )
             return redirect('post', group_id=group.id)
     return render(request, 'groups/create_post.html', {'POST_TAG': POST_TAG, 'group': group})
+
+@login_required
+def edit_post(request, group_id, post_id):
+    group = get_object_or_404(Group, id=group_id)
+    post = get_object_or_404(Post, id=post_id)
+
+    if not post.pauthor == request.user:
+        return HttpResponseForbidden("You are not the author of this post.")
+
+    if request.method == 'POST':
+        ptitle = request.POST.get('ptitle', '')
+        pcontent = request.POST.get('pcontent', '')
+        ptag = request.POST.get('ptag', '')
+
+        if ptitle:
+            post.ptitle = ptitle
+        if pcontent:
+            post.pcontent = pcontent
+        if ptag:
+            post.ptag = ptag
+
+        post.save()
+
+        messages.success(request, "Post has been updated successfully.")
+        return redirect('post', group_id=group_id)
+
+    return render(request, 'groups/edit_post.html', {'group': group, 'post': post,  'POST_TAG': POST_TAG})
+
 
 def delete_post(request, group_id):
     if request.method == 'POST':

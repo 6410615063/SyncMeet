@@ -5,7 +5,7 @@ from django.core.validators import URLValidator
 
 
 def validate_facebook_or_instagram(value):
-    if not value.startswith('https://www.facebook.com/') and not value.startswith('https://www.instagram.com/'):
+    if not value.startswith('https://www.facebook.com/') and not value.startswith('https://www.instagram.com/') and not value.startswith('-'):
         raise ValidationError(
             'Invalid link. Must be a link to Facebook or Instagram.')
 
@@ -17,12 +17,13 @@ class UserInfo(models.Model):
 
     account_UID = models.PositiveIntegerField(unique=True)
 
-    profile_image = models.ImageField(upload_to='uploads/', blank=True)
+    profile_image = models.ImageField(
+        upload_to='user/templates/profile/', blank=True, default='user/templates/profile/p_df.jpg')
 
     prefix_phone_number = models.CharField(max_length=3, default='+66')
-    phone_number = models.CharField(max_length=15)
+    phone_number = models.CharField(max_length=15, default='-')
 
-    sir_name = models.CharField(max_length=15)
+    sir_name = models.CharField(max_length=15, default='-')
 
     GENDER_CHOICES = [
         ('male', 'Male'),
@@ -33,9 +34,9 @@ class UserInfo(models.Model):
     gender = models.CharField(
         max_length=10, choices=GENDER_CHOICES, default='other')
 
-    age = models.PositiveIntegerField()
+    age = models.PositiveIntegerField(default=0)
     contact = models.URLField(
-        validators=[URLValidator(), validate_facebook_or_instagram])
+        validators=[URLValidator(), validate_facebook_or_instagram], default='-')
 
     def __str__(self):
         return f'{ self.user_id.username }'
