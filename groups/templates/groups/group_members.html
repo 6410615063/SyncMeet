@@ -32,8 +32,11 @@
                 {% else %}
                 <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar">
                 {% endif %}
+                <br>
+                <br>
                 <h2 class="group-name">{{ group.gname }}</h2>
-                <p class="group-description">{{ group.gdescription }}</p>
+                <p class="group-description">"{{ group.gdescription }}"</p>
+                <a class="btn btn-secondary" href="{% url 'edit_group' group_id=group.id %}" class="edit-group-button">Edit Group</a>
             </div>
             <br>
             <div class="group-menu-bar">
