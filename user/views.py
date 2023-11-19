@@ -11,6 +11,12 @@ from django.core.exceptions import ValidationError
 from .models import UserInfo, Friend
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.contrib.auth.views import PasswordChangeView
+from user.form import PasswordChangingForm
 
 account_sid = "AC3607d951e9f16551ff392e66a5086414"
 auth_token = "4d251cb5cbb2b470be11874ace98e0f5"
@@ -69,3 +75,19 @@ def friend_list(request, user_id):
     return render(request, 'user/friendlist.html', {
         'all_friend': all_friend,
     })
+
+def change_password(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('user:signin'))
+    if request.method=='POST':
+        form = PasswordChangingForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('user:profile')
+        else :
+            form_class = PasswordChangingForm(user=request.user)
+            return render(request, 'user/changepassword.html', {'form': form_class,'message':"Invalid password"})
+    else:
+        form_class = PasswordChangingForm(user=request.user)
+        return render(request, 'user/changepassword.html', {'form': form_class})
