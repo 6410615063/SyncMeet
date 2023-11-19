@@ -140,9 +140,10 @@ def EditSchedule(request):
         start_time = request.POST.get('start_time')
         end_day = request.POST.get('end_day')
         end_time = request.POST.get('end_time')
-        id = Activity.objects.last().activityId + 1
-        while Activity.objects.filter(activityId=id):
-            id += 1
+        id = random.randint(100000, 999999)
+        while Activity.objects.filter(activityId=id).exists():
+            id = random.randint(100000, 999999)
+
         new_activity = Activity.objects.create(user=request.user, activityId=id,
                                                start_day=start_day, start=start_time,
                                                end_day=end_day, end=end_time)
