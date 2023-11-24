@@ -50,10 +50,9 @@
             <p>Contact:
                 <a href="{{  userInfo.contact }}" target="_blank">Facebook</a>
             </p>
-
             <!-- You can check if a profile image exists before displaying it -->
-            {% if user.profile_image %}
-            <img src="{{ user.profile_image.url }}" alt="Profile Image">
+            {% if userInfo.profile_image %}
+            <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 280px; height: 240px;">
             {% else %}
             <!-- 
             {% if user.profile_image %}
