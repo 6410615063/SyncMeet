@@ -4,6 +4,8 @@ from django.http import HttpResponseForbidden
 from django.contrib import messages
 
 from .models import Group, Post, GROUP_TAG, POST_TAG
+from django.contrib.auth.models import User
+
 
 from mainPage.function import getTableSlot
 from mainPage.models import Activity
@@ -174,3 +176,44 @@ def delete_post(request, group_id):
             messages.success(request, "Post deleted successfully.")
 
     return redirect('post', group_id=group_id)
+        
+
+def remove_member(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+
+    if request.method == 'POST':
+        selected_members = request.POST.getlist('selected_members')
+
+        for member_id in selected_members:
+            try:
+                user = User.objects.get(id=member_id)
+                group.gmembers.remove(user)
+            except User.DoesNotExist:
+                pass
+
+        messages.success(request, "Selected members have been removed.")
+        return redirect('group_members', group_id=group_id)
+
+    return render(request, 'groups/remove_member.html', {'group': group})
+
+
+@login_required
+def add_member(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    gmembers = group.gmembers.all()
+    if request.method == 'POST':
+        account_UID = request.POST.get(
+            'account_UID')
+        
+        try:
+            user = User.objects.get(id=account_UID)
+            group.gmembers.add(user)
+        except User.DoesNotExist:
+            messages.error(request, f"User with ID {account_UID} does not exist.")
+            return render(request, 'groups/add_member.html', {'group_id': group_id, 'group': group})
+        
+        messages.success(request, f"User {user.username} has been added to the group.")
+        return redirect('group_members', group_id=group_id)
+
+    return render(request, 'groups/add_member.html', {'group_id': group_id, 'group': group})
+

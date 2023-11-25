@@ -4,6 +4,10 @@ from django.contrib.messages import get_messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.utils.datastructures import MultiValueDictKeyError
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+
+
 
 from .models import Group, GROUP_TAG, Post, POST_TAG
 
@@ -150,7 +154,7 @@ class PostViewTestCase(TestCase):
         self.group = Group.objects.create(
             gname='Test Group Name',
             gdescription='Test Group Description: Lorem ipsum dolor sit amet.',
-            gtag='Green',
+            gtag='Untitled',
             gcreator=self.user,
         )
         self.post = Post.objects.create(
@@ -248,3 +252,63 @@ class DeletePostTestCase(TestCase):
         messages = [m.message for m in get_messages(response.wsgi_request)] 
         self.assertIn("Post deleted successfully.", messages)
         self.assertRedirects(response, reverse('post', args=[self.group.id]))
+        
+
+
+class AddMemberTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.group = Group.objects.create(
+            gname='Test Group Name',
+            gdescription='Test Group Description',
+            gtag='Test Tag',
+            gcreator=self.user,
+        )
+
+    def test_add_member_success(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('add_member', args=[self.group.id]), {'account_UID': self.user.id})
+
+        self.assertRedirects(response, reverse('group_members', args=[self.group.id]))
+        self.assertIn(self.user, self.group.gmembers.all())
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), f"User {self.user.username} has been added to the group.")
+
+    def test_add_member_nonexistent_user(self):
+        self.client.login(username='testuser', password='testpassword')
+        non_existent_user_id = self.user.id + 100
+        response = self.client.post(reverse('add_member', args=[self.group.id]), {'account_UID': non_existent_user_id})
+        self.assertTemplateUsed(response, 'groups/add_member.html')
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), f"User with ID {non_existent_user_id} does not exist.")
+        self.assertNotIn(self.user, self.group.gmembers.all())
+
+
+class RemoveMemberTestCase(TestCase):
+    def setUp(self):
+        
+        self.user_creator = User.objects.create_user(username='creator', password='testpassword')
+        # สร้างกลุ่มและสมาชิก
+        self.group = Group.objects.create(
+            gname='Test Group',
+            gdescription='Test Group Description',
+            gtag='Test Tag',
+            gcreator=self.user_creator,
+        )
+        self.user_member = User.objects.create_user(username='member', password='testpassword')
+        self.group.gmembers.add(self.user_member)
+
+    def test_remove_member_success(self):
+        response = self.client.post(reverse('remove_member', args=[self.group.id]), {'selected_members': [self.user_member.id]})
+        self.assertEqual(response.status_code, 302)
+
+        storage = get_messages(response.wsgi_request)
+        messages = [msg.message for msg in storage]
+        self.assertIn('Selected members have been removed.', messages)
+
+        self.assertNotIn(self.user_member, self.group.gmembers.all())
+
