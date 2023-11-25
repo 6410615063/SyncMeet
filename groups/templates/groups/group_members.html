@@ -68,6 +68,10 @@
                 </div>
             </div>
             {% endfor %}
+            <br>
+            <a class="btn btn-secondary btn-success" href="{% url 'add_member' group_id=group.id %}" class="edit-group-button">Add Member</a>
+            <a class="btn btn-secondary btn-danger" href="{% url 'remove_member' group_id=group.id %}" class="edit-group-button">Remove Member</a>
+
         </div>
     </div>
 
