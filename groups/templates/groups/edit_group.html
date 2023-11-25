@@ -17,7 +17,6 @@
     <nav class="navbar bg-light">
         <div class="container-fluid">
             <a href="{% url 'group' %}"><h1 class="app-name">SyncMeet</h1></a>
-            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
 
@@ -76,7 +75,7 @@
             <br>
     
             {% if group.gprofile %}
-                <img src="{{ group.gprofile.url }}" alt="Group Profile">
+                <img src="{{ group.gprofile.url }}" alt="Group Profile" style="width: 180px; height: 180px;">
             {% endif %}
             <br>
             <br>

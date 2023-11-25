@@ -20,14 +20,13 @@
             <a href="{% url 'group' %}">
                 <h1 class="app-name">SyncMeet</h1>
             </a>
-            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
     <div class="page-content d-flex">
         <div class="user-side-bar">
             <div class="user-details">
                 {% if userInfo.profile_image %}
-                <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 180px; height: 180px;">
+                <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 120px; height: 120px;">
                 {% else %}
                 <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 120px; height: 120px;">
                 {% endif %}
@@ -38,6 +37,7 @@
                 <h4><a href="{% url 'group' %}">Group</a></h4>
                 <h4><a href="{% url 'schedule_user' %}">Schedule</a></h4>
                 <h4><a href="{% url 'user:profile' %}">Profile</a></h4>
+                <h4><a href="{% url 'about' %}">About</a></h4>
                 <h4><a href="{% url 'logout' %}">Logout</a></h4>
             </div>
         </div>
@@ -55,7 +55,7 @@
             
             <p>Gender: {{ userInfo.gender }}</p>
     
-            <select id="gender" name="gender">
+            <select class="form-control" id="gender" name="gender">
                 <option value="male" {% if userInfo.gender == 'male' %} selected {% endif %}>Male</option>
                 <option value="female" {% if userInfo.gender == 'female' %} selected {% endif %}>Female</option>
                 <option value="other" {% if userInfo.gender == 'other' %} selected {% endif %}>Other</option>
@@ -78,9 +78,9 @@
             
             {% endif %}
             <label for="profile_image">Profile Image:</label>
-            <input type="file" id="profile_image" name="profile_image"><br><br>
+            <input class="form-control" type="file" id="profile_image" name="profile_image"><br><br>
 
-            <input type="submit" value="Update">
+            <input class="form-control btn btn-primary" type="submit" value="Update">
             <!--<button type="submit" class="btn text-light" style="background-color: #3F4682;">Update</button> -->
           </form>
             </div>
