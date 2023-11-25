@@ -178,24 +178,39 @@ def delete_post(request, group_id):
     return redirect('post', group_id=group_id)
         
 
+#def remove_member(request, group_id):
+#    group = get_object_or_404(Group, id=group_id)
+#    gmembers = group.gmembers.all()
+#    if request.method == 'POST':
+#        selected_members = request.POST.getlist('selected_members')
+#
+#        for member_id in selected_members:
+#            try:
+#                user = User.objects.get(id=member_id)
+#                group.gmembers.remove(user)
+#            except User.DoesNotExist:
+#                pass
+#
+#        messages.success(request, "Selected members have been removed.")
+#        return redirect('group_members', group_id=group_id)
+#
+#    return render(request, 'groups/remove_member.html', {'group': group})
+
 def remove_member(request, group_id):
     group = get_object_or_404(Group, id=group_id)
+    members = group.gmembers.all()
 
     if request.method == 'POST':
         selected_members = request.POST.getlist('selected_members')
-
+        
         for member_id in selected_members:
-            try:
-                user = User.objects.get(id=member_id)
-                group.gmembers.remove(user)
-            except User.DoesNotExist:
-                pass
+            member_to_remove = get_object_or_404(User, id=member_id)
+            group.gmembers.remove(member_to_remove)
+            messages.success(request, "Selected members have been removed.")
+            
+        return render(request, 'groups/remove_member.html', {'group': group, 'members': members})
 
-        messages.success(request, "Selected members have been removed.")
-        return redirect('group_members', group_id=group_id)
-
-    return render(request, 'groups/remove_member.html', {'group': group})
-
+    return render(request, 'groups/remove_member.html', {'group': group, 'members': members})
 
 @login_required
 def add_member(request, group_id):

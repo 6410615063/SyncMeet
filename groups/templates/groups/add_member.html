@@ -48,7 +48,7 @@
             <div class="group-members">
             <form method="post" action="{% url 'add_member' group_id=group.id %}">
                 {% csrf_token %}
-                <label for="account_UID">User ID:</label>
+                <label for="account_UID">User UID:</label>
                 <input type="text" name="account_UID" required>
                 <button class="btn btn-secondary btn-success" type="submit">Add Member</button>
             </form>
@@ -61,7 +61,7 @@
                 </ul>
             {% endif %}
             <br>
-            <a class="btn btn-secondary" href="{% url 'group_members' group_id=group.id %}">Back to Group Members</a>
+            <a class="btn btn-secondary" href="{% url 'group_members' group_id=group.id %}">Back</a>
             </div>
         </div>
     </div>

@@ -304,7 +304,7 @@ class RemoveMemberTestCase(TestCase):
 
     def test_remove_member_success(self):
         response = self.client.post(reverse('remove_member', args=[self.group.id]), {'selected_members': [self.user_member.id]})
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
         storage = get_messages(response.wsgi_request)
         messages = [msg.message for msg in storage]
