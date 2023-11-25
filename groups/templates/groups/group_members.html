@@ -28,9 +28,9 @@
         <div class="group-side-bar">
             <div class="group-details">
                 {% if group.gprofile %}
-                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile">
+                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile" style="width: 120px; height: 120px;">
                 {% else %}
-                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar">
+                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar" style="width: 120px; height: 120px;">
                 {% endif %}
                 <br>
                 <br>

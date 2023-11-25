@@ -26,9 +26,9 @@
         <div class="group-side-bar">
             <div class="group-details">
                 {% if group.gprofile %}
-                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile">
+                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile" style="width: 120px; height: 120px;">
                 {% else %}
-                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar">
+                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar" style="width: 120px; height: 120px;">
                 {% endif %}
                 <br>
                 <br>
@@ -57,72 +57,79 @@
                 <tr>
                     <th> Sunday </th>
                     {% for slot in slot_sunday %}
+                    <th class="slot">
                     {% if slot %}
-                    <th class=busy style="background-color: Red;"> </th>
-                    {% else %}
-                    <th class=free> </th>
+                    <div class="slot_busy">
+                    </div>
                     {% endif %}
+                    </th>
                     {% endfor %}
                 </tr>
                 <tr>
                     <th> Monday </th>
                     {% for slot in slot_monday %}
-                    {% if slot %}
-                    <th class=busy style="background-color: Red;"> </th>
-                    {% else %}
-                    <th class=free> </th>
-                    {% endif %}
+                    <th class="slot">
+                        {% if slot %}
+                        <div class="slot_busy">
+                        </div>
+                        {% endif %}
+                        </th>
                     {% endfor %}
                 </tr>
                 <tr>
                     <th> Tuesday </th>
                     {% for slot in slot_tuesday %}
-                    {% if slot %}
-                    <th class=busy style="background-color: Red;"> </th>
-                    {% else %}
-                    <th class=free> </th>
-                    {% endif %}
-                    {% endfor %}
+                    <th class="slot">
+                        {% if slot %}
+                        <div class="slot_busy">
+                        </div>
+                        {% endif %}
+                        </th>
+                        {% endfor %}
                 </tr>
                 <tr>
                     <th> Wednesday </th>
                     {% for slot in slot_wednesday %}
-                    {% if slot %}
-                    <th class=busy style="background-color: Red;"> </th>
-                    {% else %}
-                    <th class=free> </th>
-                    {% endif %}
-                    {% endfor %}
+                    <th class="slot">
+                        {% if slot %}
+                        <div class="slot_busy">
+                        </div>
+                        {% endif %}
+                        </th>
+                        {% endfor %}
                 </tr>
                 <tr>
                     <th> Thursday </th>
                     {% for slot in slot_thursday %}
-                    {% if slot %}
-                    <th class=busy style="background-color: Red;"> </th>
-                    {% else %}
-                    <th class=free> </th>
-                    {% endif %}
-                    {% endfor %}
+                    <th class="slot">
+                        {% if slot %}
+                        <div class="slot_busy">
+                        </div>
+                        {% endif %}
+                        </th>
+                        {% endfor %}
                 </tr>
                 <tr>
                     <th> Friday </th>
                     {% for slot in slot_friday %}
-                    {% if slot %}
-                    <th class=busy style="background-color: Red;"> </th>
-                    {% else %}
-                    <th class=free> </th>
-                    {% endif %}
-                    {% endfor %}
+                    <th class="slot">
+                        {% if slot %}
+                        <div class="slot_busy">
+                        </div>
+                        {% endif %}
+                        </th>
+                        {% endfor %}
                 </tr>
                 <tr>
                     <th> Saturday </th>
                     {% for slot in slot_saturday %}
-                    {% if slot %}
-                    <th class=busy style="background-color: Red;"> </th>
-                    {% else %}
-                    <th class=free> </th>
-                    {% endif %}
-                    {% endfor %}
+                    <th class="slot">
+                        {% if slot %}
+                        <div class="slot_busy">
+                        </div>
+                        {% endif %}
+                        </th>
+                        {% endfor %}
                 </tr>
             </table>
         </div>        

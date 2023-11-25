@@ -48,6 +48,7 @@
     <div class="schedule" style="text-align: center;">
         <h1>Activity list</h1>
         <table class="table table-light">
+            {% if activity %}
             <tr> 
                 <th> Activity ID </th>
                 <th> Start day </th>
@@ -66,6 +67,7 @@
                 <th> <a href="{% url 'remove_activity' act.activityId %}" class="nav-link"> Delete </a> </th>
             </tr>
             {% endfor%}
+            {% endif %}
         </table>
 
         <form method="post" enctype="multipart/form-data" action="{% url 'edit_schedule' %}">

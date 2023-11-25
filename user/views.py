@@ -74,14 +74,16 @@ def friend_list(request, user_id):
 
     user = User.objects.get(username=request.user.username)
     user_info = UserInfo.objects.get(user_id=user)
-    context = {'userInfo': user_info}
 
     userInfo = UserInfo.objects.get(account_UID=user_id)
     all_friend = Friend.objects.filter(user_id=userInfo, status=True)
 
-    return render(request, 'user/friendlist.html', {
+    context = {
+        'userInfo': user_info,
         'all_friend': all_friend,
-    })
+    }
+
+    return render(request, 'user/friendlist.html', context)
 
 
 def change_password(request):
@@ -129,6 +131,7 @@ def add_friend(request):
             # สร้างเพื่อน
             friend, created = Friend.objects.get_or_create(
                 user_id=user_info, friend_id=friend_info, defaults={'status': True})
+
             friend, created = Friend.objects.get_or_create(
                 user_id=friend_info, friend_id=user_info, defaults={'status': True})
 
@@ -145,5 +148,37 @@ def add_friend(request):
             context['message'] = 'Multiple friends found! Something went wrong.'
     else:
         context['message'] = 'Invalid request method!'
+
+    return render(request, 'user/friendlist.html', context)
+
+
+def delete_friend(request):
+
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+    context = {'userInfo': user_info}
+
+    if request.method == 'POST':
+        user_account_UID = request.POST.get(
+            'user_account_UID')  # เลข account_UID ของผู้ใช้
+        # เลข account_UID ของเพื่อนที่ต้องการเพิ่ม
+        friend_account_UID = request.POST.get('friend_account_UID')
+
+        userInfo = UserInfo.objects.get(account_UID=user_account_UID)
+        all_friend = Friend.objects.filter(user_id=userInfo, status=True)
+
+        # เพิ่มข้อมูลเพิ่มเติมใน context
+        context['all_friend'] = all_friend
+
+        user_info = UserInfo.objects.get(account_UID=user_account_UID)
+        friend_info = UserInfo.objects.get(account_UID=friend_account_UID)
+
+        friend = get_object_or_404(
+            Friend, user_id=user_info, friend_id=friend_info)
+        friend.delete()
+
+        friend_re = get_object_or_404(
+            Friend, user_id=friend_info, friend_id=user_info)
+        friend_re.delete()
 
     return render(request, 'user/friendlist.html', context)

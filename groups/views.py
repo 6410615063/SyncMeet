@@ -29,7 +29,9 @@ def create_group(request):
             new_group.gmembers.add(request.user)
 
             return redirect('group')
-    return render(request, 'groups/create_group.html', {'GROUP_TAG': GROUP_TAG})
+
+    groups = Group.objects.filter(gmembers=request.user).order_by('gname')
+    return render(request, 'groups/group.html', {'groups': groups, 'GROUP_TAG': GROUP_TAG})
 
 
 def group_schedule(request, group_id):
@@ -76,7 +78,6 @@ def leave_group(request, group_id):
     return HttpResponseForbidden("Invalid request.")
 
 
-@login_required
 def edit_group(request, group_id):
     group = get_object_or_404(Group, id=group_id)
 
@@ -89,15 +90,14 @@ def edit_group(request, group_id):
         gtag = request.POST['gtag']
         gprofile = request.FILES.get('gprofile')
 
-        if gname:
-            group.gname = gname
-        if gdescription:
-            group.gdescription = gdescription
-        if gtag:
-            group.gtag = gtag
-        if gprofile:
-            group.gprofile = gprofile
-
+        if not gname or not gdescription:
+            messages.error(request, "Group name and description are required.")
+            return render(request, 'groups/edit_group.html', {'group': group, 'GROUP_TAG': GROUP_TAG})
+        
+        group.gname = gname
+        group.gdescription = gdescription
+        group.gtag = gtag
+        group.gprofile = gprofile
         group.save()
 
         messages.success(
@@ -135,7 +135,6 @@ def create_post(request, group_id):
     return render(request, 'groups/create_post.html', {'POST_TAG': POST_TAG, 'group': group})
 
 
-@login_required
 def edit_post(request, group_id, post_id):
     group = get_object_or_404(Group, id=group_id)
     post = get_object_or_404(Post, id=post_id)
@@ -148,13 +147,13 @@ def edit_post(request, group_id, post_id):
         pcontent = request.POST.get('pcontent', '')
         ptag = request.POST.get('ptag', '')
 
-        if ptitle:
-            post.ptitle = ptitle
-        if pcontent:
-            post.pcontent = pcontent
-        if ptag:
-            post.ptag = ptag
+        if not ptitle or not pcontent or not ptag:
+            messages.error(request, "All fields are required.")
+            return render(request, 'groups/edit_post.html', {'group': group, 'post': post, 'POST_TAG': POST_TAG})
 
+        post.ptitle = ptitle
+        post.pcontent = pcontent
+        post.ptag = ptag
         post.save()
 
         messages.success(request, "Post has been updated successfully.")
