@@ -22,31 +22,30 @@
         <a href="{% url 'group' %}">
             <h1 class="app-name">SyncMeet</h1>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav" style="margin-left: 2rem;">
-                <li class="nav-item">
-                    <h4><a class="nav-link" href="{% url 'group' %}">Group</a></h4>
-                </li>
-                <li class="nav-item">
-                    <h4><a class="nav-link" href="{% url 'schedule_user' %}">Schedule</a></h4>                </li>
-                <li class="nav-item">
-                    <h4><a class="nav-link" href="{% url 'user:profile' %}">Profile</a></h4>
-                </li>
-                <li>
-                    <h4><a class="nav-link" href="{% url 'logout' %}">Logout</a></h4>
-                </li>
-            </ul>
-        </div>
     </div>
 </nav>
 
-<div class="page-content d-flex" style="margin: 2.5rem;">
-    <div class="schedule" style="text-align: center;">
-        <h1>Activity list</h1>
+<div class="page-content d-flex">
+    <div class="user-side-bar">
+        <div class="user-details">
+            {% if userInfo.profile_image %}
+            <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 120px; height: 120px;">
+            {% else %}
+            <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 120px; height: 120px;">
+            {% endif %}
+            <h2 class="user-name">{{ user.username }}</h2>
+        </div>
+        <br>
+        <div class="user-menu-bar">
+            <h4><a href="{% url 'group' %}">Group</a></h4>
+            <h4><a href="{% url 'schedule_user' %}">Schedule</a></h4>
+            <h4><a href="{% url 'user:profile' %}">Profile</a></h4>
+            <h4><a href="{% url 'about' %}">About</a></h4>
+            <h4><a href="{% url 'logout' %}">Logout</a></h4>
+        </div>
+    </div>
+    <div class="schedule" style="text-align: center; margin: 5rem;">
+        <h1>Edit User Schedule</h1>
         <table class="table table-light">
             {% if activity %}
             <tr> 
@@ -73,7 +72,7 @@
         <form method="post" enctype="multipart/form-data" action="{% url 'edit_schedule' %}">
             {% csrf_token %}
             <div class="form-group group-tag d-flex">
-                <label for="start_day">Start</label>
+                <label for="start_day" style="margin-right: .5rem;">Start</label>
                 <select class="form-control" name="start_day" id="id_start_day" style="height: min-content;" required>
                     <option value="Sunday">Sunday</option>
                     <option value="Monday">Monday</option>
@@ -84,12 +83,13 @@
                     <option value="Saturday">Saturday</option>
                 </select>
                 <div class="form-group group-profile d-flex">
-                    <label for="start_time" style="margin-left: 2rem;">Time</label>
+                    <label for="start_time" style="margin-left: 2rem; margin-right: .5rem;">Time</label>
                     <input type="time" class="form-control" name="start_time" id="id_start_time" style="height: min-content;" required>
                 </div>
             </div>
+            <br>
             <div class="form-group group-tag d-flex">
-                <label for="end_day">End</label>
+                <label for="end_day" style="margin-right: .5rem;">End</label>
                 <select class="form-control" name="end_day" id="id_end_day" style="height: min-content;" required>
                     <option value="Sunday">Sunday</option>
                     <option value="Monday">Monday</option>
@@ -100,15 +100,17 @@
                     <option value="Saturday">Saturday</option>
                 </select>
                 <div class="form-group group-profile d-flex">
-                    <label for="end_time" style="margin-left: 2rem;">Time</label>
+                    <label for="end_time" style="margin-left: 2rem; margin-right: .5rem;">Time</label>
                     <input type="time" class="form-control" name="end_time" id="id_end_time" style="height: min-content;" required>
                 </div>
             </div>
+            <br>
             <div>
                 <button type="submit" class="btn btn-primary create-btn" style="height: min-content;">Create</button>
             </div>
+            <br>
         </form>
-        <a href="{% url 'schedule_user' %}" class="nav-link"> Go back </a>
+        <a href="{% url 'schedule_user' %}" class="btn btn-danger"> Go back </a>
 
     </div>
 </div>
