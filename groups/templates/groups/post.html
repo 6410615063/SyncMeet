@@ -18,7 +18,6 @@
     <nav class="navbar bg-light">
         <div class="container-fluid">
             <a href="{% url 'group' %}"><h1 class="app-name">SyncMeet</h1></a>
-            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
 
@@ -93,7 +92,13 @@
                     <div class="post-box">
                         <div>
                             <div class="d-flex">
-                                <img class="user-avatar-post" src="{% static 'groups/default_avatar.jpg' %}">
+                                <div class="user-details">
+                                    {% if userInfo.profile_image %}
+                                    <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 80px; height: 80px;">
+                                    {% else %}
+                                    <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 80px; height: 80px;">
+                                    {% endif %}
+                                </div>
                                 <div>
                                     <h5>{{ post.pauthor.username }}</h5>
                                     <p>{{ post.formatted_date }}
