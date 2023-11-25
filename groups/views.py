@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from mainPage.function import getTableSlot
 from mainPage.models import Activity
 
+from user.models import UserInfo
+
 
 @login_required
 def create_group(request):
@@ -44,17 +46,17 @@ def group_schedule(request, group_id):
     # make timeslots out of activities
     table_slot = getTableSlot(group_activities)
     timeRange = [str(hour) + ":00" for hour in range(24)]
-    return render(request, 'groups/group_schedule.html', {'group': group, 
-        'timeRange': timeRange,
-        'slot_sunday': table_slot[0],
-        'slot_monday': table_slot[1],
-        'slot_tuesday': table_slot[2],
-        'slot_wednesday': table_slot[3],
-        'slot_thursday': table_slot[4],
-        'slot_friday': table_slot[5],
-        'slot_saturday': table_slot[6],
-    }
-    )
+    return render(request, 'groups/group_schedule.html', {'group': group,
+                                                          'timeRange': timeRange,
+                                                          'slot_sunday': table_slot[0],
+                                                          'slot_monday': table_slot[1],
+                                                          'slot_tuesday': table_slot[2],
+                                                          'slot_wednesday': table_slot[3],
+                                                          'slot_thursday': table_slot[4],
+                                                          'slot_friday': table_slot[5],
+                                                          'slot_saturday': table_slot[6],
+                                                          }
+                  )
 
 
 def group_members(request, group_id):
@@ -93,7 +95,7 @@ def edit_group(request, group_id):
         if not gname or not gdescription:
             messages.error(request, "Group name and description are required.")
             return render(request, 'groups/edit_group.html', {'group': group, 'GROUP_TAG': GROUP_TAG})
-        
+
         group.gname = gname
         group.gdescription = gdescription
         group.gtag = gtag
@@ -175,9 +177,9 @@ def delete_post(request, group_id):
             messages.success(request, "Post deleted successfully.")
 
     return redirect('post', group_id=group_id)
-        
 
-#def remove_member(request, group_id):
+
+# def remove_member(request, group_id):
 #    group = get_object_or_404(Group, id=group_id)
 #    gmembers = group.gmembers.all()
 #    if request.method == 'POST':
@@ -201,33 +203,37 @@ def remove_member(request, group_id):
 
     if request.method == 'POST':
         selected_members = request.POST.getlist('selected_members')
-        
+
         for member_id in selected_members:
             member_to_remove = get_object_or_404(User, id=member_id)
             group.gmembers.remove(member_to_remove)
             messages.success(request, "Selected members have been removed.")
-            
+
         return render(request, 'groups/remove_member.html', {'group': group, 'members': members})
 
     return render(request, 'groups/remove_member.html', {'group': group, 'members': members})
 
+
 @login_required
 def add_member(request, group_id):
+
     group = get_object_or_404(Group, id=group_id)
     gmembers = group.gmembers.all()
     if request.method == 'POST':
         account_UID = request.POST.get(
             'account_UID')
-        
+
         try:
-            user = User.objects.get(id=account_UID)
+            user_info = UserInfo.objects.get(account_UID=account_UID)
+            user = User.objects.get(username=user_info.user_id)
             group.gmembers.add(user)
         except User.DoesNotExist:
-            messages.error(request, f"User with ID {account_UID} does not exist.")
+            messages.error(
+                request, f"User with ID {account_UID} does not exist.")
             return render(request, 'groups/add_member.html', {'group_id': group_id, 'group': group})
-        
-        messages.success(request, f"User {user.username} has been added to the group.")
+
+        messages.success(
+            request, f"User {user.username} has been added to the group.")
         return redirect('group_members', group_id=group_id)
 
     return render(request, 'groups/add_member.html', {'group_id': group_id, 'group': group})
-
