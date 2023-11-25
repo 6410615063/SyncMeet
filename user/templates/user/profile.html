@@ -20,14 +20,13 @@
             <a href="{% url 'group' %}">
                 <h1 class="app-name">SyncMeet</h1>
             </a>
-            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
     <div class="page-content d-flex">
         <div class="user-side-bar">
             <div class="user-details">
                 {% if userInfo.profile_image %}
-                <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 180px; height: 180px;">
+                <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 120px; height: 120px;">
                 {% else %}
                 <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 120px; height: 120px;">
                 {% endif %}
@@ -38,6 +37,7 @@
                 <h4><a href="{% url 'group' %}">Group</a></h4>
                 <h4><a href="{% url 'schedule_user' %}">Schedule</a></h4>
                 <h4><a href="{% url 'user:profile' %}">Profile</a></h4>
+                <h4><a href="{% url 'about' %}">About</a></h4>
                 <h4><a href="{% url 'logout' %}">Logout</a></h4>
             </div>
         </div>
@@ -56,7 +56,7 @@
             </p>
             <!-- You can check if a profile image exists before displaying it -->
             {% if userInfo.profile_image %}
-            <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 280px; height: 240px;">
+            <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 280px; height: 280px;">
             {% else %}
             <!-- 
             {% if user.profile_image %}
