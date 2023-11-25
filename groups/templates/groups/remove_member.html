@@ -18,7 +18,6 @@
     <nav class="navbar bg-light">
         <div class="container-fluid">
             <a href="{% url 'group' %}"><h1 class="app-name">SyncMeet</h1></a>
-            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
 
@@ -26,9 +25,9 @@
         <div class="group-side-bar">
             <div class="group-details">
                 {% if group.gprofile %}
-                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile">
+                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile" style="width: 120px; height: 120px;">
                 {% else %}
-                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar">
+                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar" style="width: 120px; height: 120px;">
                 {% endif %}
                 <br>
                 <br>
@@ -49,11 +48,15 @@
                 <h1>Select members to remove</h1>
                 {% for member in members %}
                 <div class="group-member-box">
-                    <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
+                    {% if user_info.profile_image %}
+                    <img src="{{ user_info.profile_image.url }}" alt="Profile Image" style="display: block; margin: 1rem; width: 80px; height: 80px;">
+                    {% else %}
+                    <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="display: block; margin: 1rem; width: 80px; height: 80px;">
+                    {% endif %}
                     <div class="group-member-details">
                         <h5 class="group-member-name">{{ member.username }}</h5>
-                        <p>name surname</p>
-                        <p>email:</p>
+                        <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+                        <p>Email: {{ user.email }}</p>
                         <button type="submit" name="member" value="{{ member.id }}" class="btn btn-danger">Remove Member</button>
                     </div>
                     <br>

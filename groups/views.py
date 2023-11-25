@@ -46,24 +46,27 @@ def group_schedule(request, group_id):
     # make timeslots out of activities
     table_slot = getTableSlot(group_activities)
     timeRange = [str(hour) + ":00" for hour in range(24)]
-    return render(request, 'groups/group_schedule.html', {'group': group,
-                                                          'timeRange': timeRange,
-                                                          'slot_sunday': table_slot[0],
-                                                          'slot_monday': table_slot[1],
-                                                          'slot_tuesday': table_slot[2],
-                                                          'slot_wednesday': table_slot[3],
-                                                          'slot_thursday': table_slot[4],
-                                                          'slot_friday': table_slot[5],
-                                                          'slot_saturday': table_slot[6],
-                                                          }
-                  )
+    return render(request, 'groups/group_schedule.html', {
+        'group': group,
+        'timeRange': timeRange,
+        'slot_sunday': table_slot[0],
+        'slot_monday': table_slot[1],
+        'slot_tuesday': table_slot[2],
+        'slot_wednesday': table_slot[3],
+        'slot_thursday': table_slot[4],
+        'slot_friday': table_slot[5],
+        'slot_saturday': table_slot[6],
+    })
 
 
 def group_members(request, group_id):
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+
     group = get_object_or_404(Group, id=group_id)
     members = group.gmembers.all()
 
-    return render(request, 'groups/group_members.html', {'group': group, 'members': members})
+    return render(request, 'groups/group_members.html', {'group': group, 'members': members, 'user_info': user_info})
 
 
 def leave_group(request, group_id):
@@ -110,12 +113,15 @@ def edit_group(request, group_id):
 
 
 def post(request, group_id):
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+
     tag_filter = request.GET.get('ptag', '')
 
     group = get_object_or_404(Group, id=group_id)
     posts = Post.objects.filter(
         pgroup_id=group_id, ptag__icontains=tag_filter).order_by('-pcreated_on')
-    return render(request, 'groups/post.html', {'posts': posts, 'POST_TAG': POST_TAG, 'group': group})
+    return render(request, 'groups/post.html', {'posts': posts, 'POST_TAG': POST_TAG, 'group': group, 'user_info' : user_info})
 
 
 def create_post(request, group_id):
@@ -198,6 +204,9 @@ def delete_post(request, group_id):
 #    return render(request, 'groups/remove_member.html', {'group': group})
 
 def remove_member(request, group_id):
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+
     group = get_object_or_404(Group, id=group_id)
     members = group.gmembers.all()
 
@@ -211,7 +220,7 @@ def remove_member(request, group_id):
 
         return render(request, 'groups/remove_member.html', {'group': group, 'members': members})
 
-    return render(request, 'groups/remove_member.html', {'group': group, 'members': members})
+    return render(request, 'groups/remove_member.html', {'group': group, 'members': members, 'user_info': user_info})
 
 
 @login_required

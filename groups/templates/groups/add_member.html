@@ -18,7 +18,6 @@
     <nav class="navbar bg-light">
         <div class="container-fluid">
             <a href="{% url 'group' %}"><h1 class="app-name">SyncMeet</h1></a>
-            <img class="user-avatar" src="{% static 'groups/default_avatar.jpg' %}">
         </div>
     </nav>
 
@@ -26,9 +25,9 @@
         <div class="group-side-bar">
             <div class="group-details">
                 {% if group.gprofile %}
-                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile">
+                <img class="group-avatar" src="{{ group.gprofile.url }}" alt="{{ group.gname }} Profile" style="width: 120px; height: 120px;">
                 {% else %}
-                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar">
+                <img class="group-avatar" src="{% static 'groups/default_avatar.jpg' %}" alt="Default Avatar" style="width: 120px; height: 120px;">
                 {% endif %}
                 <br>
                 <br>
@@ -50,9 +49,10 @@
                 {% csrf_token %}
                 <label for="account_UID">User UID:</label>
                 <input type="text" name="account_UID" required>
-                <button class="btn btn-secondary btn-success" type="submit">Add Member</button>
+                <br>
+                <br>
+                <button class="btn btn-success" type="submit">Add Member</button>
             </form>
-            <br>
             {% if messages %}
                 <ul class="messages">
                     {% for message in messages %}
