@@ -9,7 +9,7 @@ from groups.models import GROUP_TAG, Group
 
 from mainPage.models import Activity
 
-from mainPage.function import getTableSlot
+from mainPage.function import getTableSlot, getTable
 # Create your views here.
 import random
 
@@ -117,9 +117,10 @@ def group(request):
 def UserSchedule(request):
     activity = Activity.objects.filter(user=request.user)
     table_slot = getTableSlot(activity)
+    table = getTable(table_slot)
     timeRange = [str(hour) + ":00" for hour in range(24)]
     return render(request, 'mainPage/schedule_user.html', {
-        'activity': activity,
+        'table': table,
         'timeRange': timeRange,
         'slot_sunday': table_slot[0],
         'slot_monday': table_slot[1],
