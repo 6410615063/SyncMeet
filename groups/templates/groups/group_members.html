@@ -59,16 +59,17 @@
             <h1>Members</h1>
             {% for member in members %}
             <div class="group-member-box">
-                {% if userInfo.profile_image %}
-                <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 1rem; width: 90px; height: 90px;">
+                {% if user_info.profile_image %}
+                <img src="{{ user_info.profile_image.url }}" alt="Profile Image" style="display: block; margin: 1rem; width: 80px; height: 80px;">
                 {% else %}
-                <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="margin: 1rem; width: 90px; height: 90px;">
+                <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="display: block; margin: 1rem; width: 80px; height: 80px;">
                 {% endif %}
                 <div class="group-member-details">
                     <h5 class="group-member-name">{{ member.username }}</h5>
-                    <p>name surname</p>
-                    <p>email:</p>
+                    <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+                    <p>Email: {{ user.email }}</p>
                 </div>
+                <br>
             </div>
             {% endfor %}
             <br>

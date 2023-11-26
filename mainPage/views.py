@@ -95,7 +95,9 @@ def LogoutPage(request):
 
 
 def AboutPage(request):
-    return render(request, 'mainPage/about.html')
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+    return render(request, 'mainPage/about.html', {'userInfo': user_info})
 
 
 @login_required(login_url='login')
@@ -111,7 +113,16 @@ def group(request):
 
     groups = Group.objects.filter(
         gmembers=request.user, gname__icontains=group_filter, gtag__icontains=tag_filter).order_by('gname')
-    return render(request, 'groups/group.html', {'groups': groups, 'GROUP_TAG': GROUP_TAG})
+    
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+
+    context = {
+        'groups': groups,
+        'GROUP_TAG': GROUP_TAG,
+        'context': {'userInfo': user_info},
+    }
+    return render(request, 'groups/group.html', context)
 
 
 def UserSchedule(request):
@@ -127,6 +138,9 @@ def UserSchedule(request):
 
 
 def EditSchedule(request):
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+
     activity = Activity.objects.filter(user=request.user)
 
     if request.method == 'POST':
@@ -144,8 +158,8 @@ def EditSchedule(request):
         new_activity.save()
     return render(request, 'mainPage/edit_schedule.html', {
         'activity': activity,
-    }
-    )
+        'user_info': user_info,
+    })
 
 
 def RemoveActivity(request, activityId):

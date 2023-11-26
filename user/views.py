@@ -87,6 +87,9 @@ def friend_list(request, user_id):
 
 
 def change_password(request):
+    user = User.objects.get(username=request.user.username)
+    user_info = UserInfo.objects.get(user_id=user)
+
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('user:signin'))
     if request.method == 'POST':
@@ -97,14 +100,10 @@ def change_password(request):
             return redirect('user:profile')
         else:
             form_class = PasswordChangingForm(user=request.user)
-            return render(request, 'user/changepassword.html', {'form': form_class, 'message': "Invalid password"})
+            return render(request, 'user/changepassword.html', {'form': form_class, 'user_info': user_info, 'message': "Invalid password"})
     else:
         form_class = PasswordChangingForm(user=request.user)
-        return render(request, 'user/changepassword.html', {'form': form_class})
-    # เพิ่มข้อมูลเพิ่มเติมใน context
-    context['all_friend'] = all_friend
-
-    return render(request, 'user/friendlist.html', context)
+        return render(request, 'user/changepassword.html', {'form': form_class, 'user_info': user_info})
 
 
 def add_friend(request):

@@ -93,8 +93,8 @@
                         <div>
                             <div class="d-flex">
                                 <div class="user-details">
-                                    {% if userInfo.profile_image %}
-                                    <img src="{{ userInfo.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 80px; height: 80px;">
+                                    {% if user_info.profile_image %}
+                                    <img src="{{ user_info.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 80px; height: 80px;">
                                     {% else %}
                                     <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 80px; height: 80px;">
                                     {% endif %}
