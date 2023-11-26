@@ -81,12 +81,6 @@ class UserTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user/friendlist.html')
 
-    def test_friend_list_unauthenticated(self):
-        response = self.client.get(
-            reverse('user:friend_list', args=(self.userInfo.account_UID,)))
-        self.assertRedirects(
-            response, f'{reverse("user:signin")}?next=/user/{self.userInfo.account_UID}/friend_list/')
-
     def test_add_friend(self):
         self.client.force_login(self.user)
         data = {'user_account_UID': self.userInfo.account_UID,
@@ -129,7 +123,6 @@ class UserTest(TestCase):
         self.user_info = UserInfo.objects.create(
             user_id=self.user, account_UID=000, sir_name='Test Sir', gender='male', age=25, contact='-')
 
-        # สร้างข้อมูล POST request
         post_data = {
             'username': 'new_username',
             'sir_name': 'New Sir Name',
@@ -138,17 +131,31 @@ class UserTest(TestCase):
             'contact': '-',
         }
 
-        # ทำการ request ไปยัง edit_profile view ด้วยข้อมูล POST
         response = self.client.post(reverse('user:edit_profile'), post_data)
 
-        # ตรวจสอบว่าหน้าถูก redirect ไปที่หน้าหลักหรือไม่
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/')
 
-        # ทดสอบการแก้ไขข้อมูลโปรไฟล์
         updated_user_info = UserInfo.objects.get(user_id=self.user)
 
         self.assertEqual(updated_user_info.sir_name, 'New Sir Name')
         self.assertEqual(updated_user_info.gender, 'Male')
         self.assertEqual(updated_user_info.age, 30)
         self.assertEqual(updated_user_info.contact, '-')
+
+class FriendListTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user_info = UserInfo.objects.create(user_id=self.user, account_UID=123)
+        self.friend_user = User.objects.create_user(username='frienduser', password='friendpassword')
+        self.friend_user_info = UserInfo.objects.create(user_id=self.friend_user, account_UID=456)
+        self.friendship = Friend.objects.create(user_id=self.user_info, friend_id=self.friend_user_info, status=True)
+
+    def test_friendlist_unauthenticated(self):
+        client = Client()
+        response = client.get(reverse('user:friend_list', args=[self.user_info.account_UID]))
+        self.assertRedirects(response, reverse('login'))
+        self.assertEqual(response.status_code, 302)
+        if response.status_code != 302:
+            self.assertNotIn('userInfo', response.context)
+            self.assertNotIn('all_friend', response.context)
