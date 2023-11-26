@@ -7,7 +7,7 @@ from .models import Group, Post, GROUP_TAG, POST_TAG
 from django.contrib.auth.models import User
 
 
-from mainPage.function import getTableSlot
+from mainPage.function import getTableSlot, getTable
 from mainPage.models import Activity
 
 from user.models import UserInfo
@@ -45,19 +45,38 @@ def group_schedule(request, group_id):
         group_activities = group_activities | activity
     # make timeslots out of activities
     table_slot = getTableSlot(group_activities)
+    table = getTable(table_slot)
     timeRange = [str(hour) + ":00" for hour in range(24)]
     return render(request, 'groups/group_schedule.html', {'group': group,
                                                           'timeRange': timeRange,
-                                                          'slot_sunday': table_slot[0],
-                                                          'slot_monday': table_slot[1],
-                                                          'slot_tuesday': table_slot[2],
-                                                          'slot_wednesday': table_slot[3],
-                                                          'slot_thursday': table_slot[4],
-                                                          'slot_friday': table_slot[5],
-                                                          'slot_saturday': table_slot[6],
+                                                          'table': table,
+                                                        #   'slot_sunday': table_slot[0],
+                                                        #   'slot_monday': table_slot[1],
+                                                        #   'slot_tuesday': table_slot[2],
+                                                        #   'slot_wednesday': table_slot[3],
+                                                        #   'slot_thursday': table_slot[4],
+                                                        #   'slot_friday': table_slot[5],
+                                                        #   'slot_saturday': table_slot[6],
                                                           }
                   )
 
+def group_schedule_by_day(request, group_id, day_name):
+    #get group from id
+    group = get_object_or_404(Group, id=group_id)
+    group_activities = Activity.objects.none()
+    #at html: loop for each menbers = [name, slot1, slot2, ...., slot24]
+    # check if value = 0, 1, or name
+    
+    #make list of all activities of all members
+    members = group.gmembers.all();
+    table = []
+    for member in members:
+        row = [member.username]
+        activity = Activity.objects.filter(user=member)
+        table.append(row)
+        # group_activities = group_activities | activity
+    #only join activity from the chosen day? or join all and choose from the time table array
+    #make time table
 
 def group_members(request, group_id):
     group = get_object_or_404(Group, id=group_id)
