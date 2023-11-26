@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 from .models import Group, GROUP_TAG, Post, POST_TAG
+from user.models import UserInfo
 
 # Create your tests here.
 
@@ -56,6 +57,17 @@ class GroupViewTest(TestCase):
             gtag='Untitled',
             gcreator=self.user,
         )
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
         self.client = Client()
 
     def test_admin_user_redirect_to_admin_page(self):
@@ -88,6 +100,17 @@ class GroupCreateTest(TestCase):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.client = Client()
         self.client.login(username='testuser', password='testpassword')
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
 
     def test_create_group_success(self):
         self.client.login(username='testuser', password='testpassword')
@@ -141,6 +164,17 @@ class GroupMembersTest(TestCase):
             gdescription='Test Group Description: Lorem ipsum dolor sit amet.',
             gtag='Red',
             gcreator=self.user,
+        )
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
         )
         self.group.gmembers.add(self.user)
     
@@ -225,17 +259,35 @@ class PostViewTest(TestCase):
             ptag='Blue',
             pgroup=self.group,
         )
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
 
     def test_post_view_with_search_by_tag_filter(self):
-        response = self.client.get(reverse('post', args=[self.group.id]), {'ptag': 'Blue'})
-        self.assertEqual(response.status_code, 200) 
-        self.assertTemplateUsed(response, 'groups/post.html')  
-        self.assertEqual(response.context['posts'].count(), 1)  
-        self.assertEqual(response.context['posts'][0], self.post) 
-        self.assertEqual(response.context['POST_TAG'], POST_TAG)  
+        self.client.login(username='testuser', password='testpassword')
+        tag_filter = 'Blue'
+        response = self.client.get(reverse('post', args=[self.group.id]), {'ptag': tag_filter})
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTemplateUsed(response, 'groups/post.html')
+        self.assertEqual(response.context['posts'].count(), 1)
+        self.assertEqual(response.context['posts'][0], self.post)
+        self.assertEqual(response.context['POST_TAG'], POST_TAG)
         self.assertEqual(response.context['group'], self.group)
+        self.assertEqual(response.context['user_info'].user_id, self.user)
+
 
     def test_post_view_without_search_by_tag_filter(self):
+        self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('post', args=[self.group.id]))
         self.assertEqual(response.status_code, 200)  
         self.assertTemplateUsed(response, 'groups/post.html')  
@@ -243,6 +295,7 @@ class PostViewTest(TestCase):
         self.assertEqual(response.context['posts'][0], self.post)  
         self.assertEqual(response.context['POST_TAG'], POST_TAG) 
         self.assertEqual(response.context['group'], self.group) 
+        self.assertEqual(response.context['user_info'].user_id, self.user)
 
 class CreatePostTest(TestCase):
     def setUp(self):
@@ -253,6 +306,18 @@ class CreatePostTest(TestCase):
             gtag='Purple',
             gcreator=self.user,
         )
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
+        
     def test_create_post(self):
         self.client.login(username='testuser', password='testpassword')
 
@@ -296,6 +361,17 @@ class DeletePostTest(TestCase):
             ptag='Blue',
             pgroup=self.group,
         )
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
 
     def test_delete_post_success(self):
         self.client.login(username='testuser', password='testpassword')
@@ -306,9 +382,60 @@ class DeletePostTest(TestCase):
         self.assertIn("Post deleted successfully.", messages)
         self.assertRedirects(response, reverse('post', args=[self.group.id]))
 
-        
+class EditPostTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.group = Group.objects.create(gname='Test Group', gdescription='This is a test group', gcreator=self.user)
+        self.post = Post.objects.create(ptitle='Test Post', pauthor=self.user, pcontent='This is a test post', pgroup=self.group)
+        self.non_author_user = User.objects.create_user(username='nonauthor', password='testpassword')
+        self.client = Client()
+        self.client.login(username='testuser', password='testpassword')
+
+    def test_edit_post_fail_not_author(self):
+        self.client.logout()
+        self.client.login(username='nonauthor', password='testpassword')
+        url = reverse('edit_post', args=[self.group.id, self.post.id])
+        data = {
+            'ptitle': 'Post Title',
+            'pcontent': 'Post content',
+            'ptag': 'Green',
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 403) 
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.ptitle, 'Test Post')
+        self.assertEqual(self.post.pcontent, 'This is a test post')
+
+    def test_edit_post_success(self):
+        url = reverse('edit_post', args=[self.group.id, self.post.id])
+        data = {
+            'ptitle': 'Updated Post Title',
+            'pcontent': 'Updated post content',
+            'ptag': 'Blue',
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)  
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.ptitle, 'Updated Post Title')
+        self.assertEqual(self.post.pcontent, 'Updated post content')
+        self.assertEqual(self.post.ptag, 'Blue')
+    
+    def test_edit_post_fail_missing_fields(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('edit_post', args=[self.group.id, self.post.id]), {
+            'ptitle': '', 
+            'pcontent': '',  
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "All fields are required.")
+        self.post.refresh_from_db()
+        self.assertNotEqual(self.post.ptitle, '')
+        self.assertNotEqual(self.post.pcontent, '')
 
 
+
+
+# ERROR TEST
 class AddMemberTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
@@ -365,56 +492,3 @@ class RemoveMemberTestCase(TestCase):
         self.assertIn('Selected members have been removed.', messages)
 
         self.assertNotIn(self.user_member, self.group.gmembers.all())
-
-
-
-class EditPostTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.group = Group.objects.create(gname='Test Group', gdescription='This is a test group', gcreator=self.user)
-        self.post = Post.objects.create(ptitle='Test Post', pauthor=self.user, pcontent='This is a test post', pgroup=self.group)
-        self.non_author_user = User.objects.create_user(username='nonauthor', password='testpassword')
-        self.client = Client()
-        self.client.login(username='testuser', password='testpassword')
-
-    def test_edit_post_fail_not_author(self):
-        self.client.logout()
-        self.client.login(username='nonauthor', password='testpassword')
-        url = reverse('edit_post', args=[self.group.id, self.post.id])
-        data = {
-            'ptitle': 'Post Title',
-            'pcontent': 'Post content',
-            'ptag': 'Green',
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 403) 
-        self.post.refresh_from_db()
-        self.assertEqual(self.post.ptitle, 'Test Post')
-        self.assertEqual(self.post.pcontent, 'This is a test post')
-
-    def test_edit_post_success(self):
-        url = reverse('edit_post', args=[self.group.id, self.post.id])
-        data = {
-            'ptitle': 'Updated Post Title',
-            'pcontent': 'Updated post content',
-            'ptag': 'Blue',
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 302)  
-        self.post.refresh_from_db()
-        self.assertEqual(self.post.ptitle, 'Updated Post Title')
-        self.assertEqual(self.post.pcontent, 'Updated post content')
-        self.assertEqual(self.post.ptag, 'Blue')
-    
-    def test_edit_post_fail_missing_fields(self):
-        self.client.login(username='testuser', password='testpassword')
-        response = self.client.post(reverse('edit_post', args=[self.group.id, self.post.id]), {
-            'ptitle': '', 
-            'pcontent': '',  
-        })
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "All fields are required.")
-        self.post.refresh_from_db()
-        self.assertNotEqual(self.post.ptitle, '')
-        self.assertNotEqual(self.post.pcontent, '')
-
