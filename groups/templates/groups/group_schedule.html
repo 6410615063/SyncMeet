@@ -62,7 +62,7 @@
                             <div class="slot_busy">
                             </div>
                         {% else %}
-                        <a href="{% url 'group_schedule_by_day' group.id col %}" class="nav-link"> {{col}} </a>
+                        <a href="{% url 'group_schedule_by_day' group_id=group.id day_name=col %}" class="nav-link"> {{col}} </a>
                         {% endif %}
                     </th>
                     {% endfor %}
