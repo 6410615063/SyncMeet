@@ -49,7 +49,6 @@ def edit_profile(request):
         age = request.POST.get('age')
         contact = request.POST.get('contact')
 
-        # ตรวจสอบการอัปโหลดรูปภาพ
         if 'profile_image' in request.FILES:
             profile_image = request.FILES['profile_image']
             user_info.profile_image = profile_image
@@ -70,7 +69,7 @@ def edit_profile(request):
 
 def friend_list(request, user_id):
     if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('user:signin'))
+        return HttpResponseRedirect(reverse('login'))
 
     user = User.objects.get(username=request.user.username)
     user_info = UserInfo.objects.get(user_id=user)
@@ -88,7 +87,6 @@ def friend_list(request, user_id):
 
 def change_password(request):
     user = User.objects.get(username=request.user.username)
-    user_info = UserInfo.objects.get(user_id=user)
 
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('user:signin'))
@@ -100,10 +98,10 @@ def change_password(request):
             return redirect('user:profile')
         else:
             form_class = PasswordChangingForm(user=request.user)
-            return render(request, 'user/changepassword.html', {'form': form_class, 'user_info': user_info, 'message': "Invalid password"})
+            return render(request, 'user/changepassword.html', {'form': form_class, 'message': "Invalid password"})
     else:
         form_class = PasswordChangingForm(user=request.user)
-        return render(request, 'user/changepassword.html', {'form': form_class, 'user_info': user_info})
+        return render(request, 'user/changepassword.html', {'form': form_class,})
 
 
 def add_friend(request):
@@ -113,21 +111,16 @@ def add_friend(request):
 
     if request.method == 'POST':
         user_account_UID = request.POST.get(
-            'user_account_UID')  # เลข account_UID ของผู้ใช้
-        # เลข account_UID ของเพื่อนที่ต้องการเพิ่ม
+            'user_account_UID')
         friend_account_UID = request.POST.get('friend_account_UID')
 
         userInfo = UserInfo.objects.get(account_UID=user_account_UID)
         all_friend = Friend.objects.filter(user_id=userInfo, status=True)
-
-        # เพิ่มข้อมูลเพิ่มเติมใน context
         context['all_friend'] = all_friend
 
         try:
             user_info = UserInfo.objects.get(account_UID=user_account_UID)
             friend_info = UserInfo.objects.get(account_UID=friend_account_UID)
-
-            # สร้างเพื่อน
             friend, created = Friend.objects.get_or_create(
                 user_id=user_info, friend_id=friend_info, defaults={'status': True})
 
@@ -152,23 +145,17 @@ def add_friend(request):
 
 
 def delete_friend(request):
-
     user = User.objects.get(username=request.user.username)
     user_info = UserInfo.objects.get(user_id=user)
     context = {'userInfo': user_info}
-
     if request.method == 'POST':
         user_account_UID = request.POST.get(
-            'user_account_UID')  # เลข account_UID ของผู้ใช้
-        # เลข account_UID ของเพื่อนที่ต้องการเพิ่ม
+            'user_account_UID')
         friend_account_UID = request.POST.get('friend_account_UID')
 
         userInfo = UserInfo.objects.get(account_UID=user_account_UID)
         all_friend = Friend.objects.filter(user_id=userInfo, status=True)
-
-        # เพิ่มข้อมูลเพิ่มเติมใน context
         context['all_friend'] = all_friend
-
         user_info = UserInfo.objects.get(account_UID=user_account_UID)
         friend_info = UserInfo.objects.get(account_UID=friend_account_UID)
 
