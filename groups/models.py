@@ -5,12 +5,18 @@ from django.contrib.auth.models import User
 
 GROUP_TAG = (
     ('Untitled', 'Untitled'),
-    ('Purple', 'Purple'),
-    ('Blue', 'Blue'),
-    ('Green', 'Green'),
-    ('Yellow', 'Yellow'),
-    ('Orange', 'Orange'),
-    ('Red', 'Red'),
+    ('Education', 'Education'),
+    ('Travel', 'Travel'),
+    ('Work', 'Work'),
+    ('Sports', 'Sports'),
+    ('Food', 'Food'),
+    ('Reading', 'Reading'),
+    ('Art', 'Art'),
+    ('Pets', 'Pets'),    
+    ('Movies', 'Movies'),
+    ('Music', 'Music'),
+    ('Health', 'Health'),
+    ('Technology', 'Technology'),
 )
 
 class Group(models.Model):
@@ -30,12 +36,18 @@ class Group(models.Model):
 
 POST_TAG = (
     ('Untitled', 'Untitled'),
-    ('Purple', 'Purple'),
-    ('Blue', 'Blue'),
-    ('Green', 'Green'),
-    ('Yellow', 'Yellow'),
-    ('Orange', 'Orange'),
-    ('Red', 'Red'),
+    ('Education', 'Education'),
+    ('Travel', 'Travel'),
+    ('Work', 'Work'),
+    ('Sports', 'Sports'),
+    ('Food', 'Food'),
+    ('Reading', 'Reading'),
+    ('Art', 'Art'),
+    ('Pets', 'Pets'),    
+    ('Movies', 'Movies'),
+    ('Music', 'Music'),
+    ('Health', 'Health'),
+    ('Technology', 'Technology'),
 )
 
 class Post(models.Model):
