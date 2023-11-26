@@ -58,6 +58,7 @@
         <div class="group-members">
             <h1>Members</h1>
             {% for member_info in members_info %}
+            <br>
             <div class="group-member-box">
                 {% if member_info.profile_image %}
                 <img src="{{ member_info.profile_image.url }}" alt="Profile Image" style="display: block; margin: 1rem; width: 80px; height: 80px;">
@@ -75,8 +76,9 @@
             {% endfor %}
             <br>
             <a class="btn btn-secondary btn-success" href="{% url 'add_member' group_id=group.id %}" class="edit-group-button">Add Member</a>
+            {% if user == group.gcreator %}
             <a class="btn btn-secondary btn-danger" href="{% url 'remove_member' group_id=group.id %}" class="edit-group-button">Remove Member</a>
-
+            {% endif %}
         </div>
     </div>
 

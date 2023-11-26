@@ -159,3 +159,36 @@ class FriendListTest(TestCase):
         if response.status_code != 302:
             self.assertNotIn('userInfo', response.context)
             self.assertNotIn('all_friend', response.context)
+
+class DeleteFriendTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='testuser', password='testpassword'
+        )
+        self.friend = User.objects.create_user(
+            username='frienduser', password='testpassword'
+        )
+
+        self.user_info = UserInfo.objects.create(
+            user_id=self.user, account_UID=123
+        )
+        self.friend_info = UserInfo.objects.create(
+            user_id=self.friend, account_UID=456
+        )
+
+        self.friendship = Friend.objects.create(
+            user_id=self.user_info, friend_id=self.friend_info
+        )
+
+        self.client.login(username='testuser', password='testpassword')
+
+    def test_delete_friend_success(self):
+        response = self.client.post(reverse('user:delete_friend'), {
+            'user_account_UID': self.user_info.account_UID,
+            'friend_account_UID': self.friend_info.account_UID
+        })
+
+        self.assertEqual(response.status_code, 404)
+
+        with self.assertRaises(Friend.DoesNotExist):
+            Friend.objects.get(pk=self.friendship.pk)

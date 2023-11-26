@@ -47,6 +47,7 @@
             <div class="group-members">
                 <h1>Select members to remove</h1>
                 {% for member in members %}
+                <br>
                 <div class="group-member-box">
                     {% if user_info.profile_image %}
                     <img src="{{ user_info.profile_image.url }}" alt="Profile Image" style="display: block; margin: 1rem; width: 80px; height: 80px;">
