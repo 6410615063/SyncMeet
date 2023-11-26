@@ -284,7 +284,7 @@ def add_member(request, group_id):
             user_info = UserInfo.objects.get(account_UID=account_UID)
             user = User.objects.get(username=user_info.user_id)
             group.gmembers.add(user)
-        except User.DoesNotExist:
+        except UserInfo.DoesNotExist:
             messages.error(
                 request, f"User with ID {account_UID} does not exist.")
             return render(request, 'groups/add_member.html', {'group_id': group_id, 'group': group})
