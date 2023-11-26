@@ -4,7 +4,7 @@ from django.urls import path, include
 urlpatterns = [
     path('create_group/', views.create_group, name='create_group'),
     path('group/<int:group_id>/', views.group_schedule, name='group_schedule'),
-    path('group/<int:group_id>/<str:day_name>/', views.group_schedule_by_day, name='group_schedule_by_day'),
+    path('group/<int:group_id>/<str:day_name>', views.group_schedule_by_day, name='group_schedule_by_day'),
     path('group/<int:group_id>/members', views.group_members, name='group_members'),
     path('group/<int:group_id>/members/add_member/', views.add_member, name='add_member'),
     path('group/<int:group_id>/members/remove_member/', views.remove_member, name='remove_member'),
