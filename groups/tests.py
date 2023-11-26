@@ -390,6 +390,8 @@ class EditPostTest(TestCase):
         self.non_author_user = User.objects.create_user(username='nonauthor', password='testpassword')
         self.client = Client()
         self.client.login(username='testuser', password='testpassword')
+<<<<<<< HEAD
+=======
 
     def test_edit_post_fail_not_author(self):
         self.client.logout()
@@ -432,8 +434,54 @@ class EditPostTest(TestCase):
         self.assertNotEqual(self.post.ptitle, '')
         self.assertNotEqual(self.post.pcontent, '')
 
+>>>>>>> 1b5f49c573b4584726792d7de1eb5199909a8485
+
+    def test_edit_post_fail_not_author(self):
+        self.client.logout()
+        self.client.login(username='nonauthor', password='testpassword')
+        url = reverse('edit_post', args=[self.group.id, self.post.id])
+        data = {
+            'ptitle': 'Post Title',
+            'pcontent': 'Post content',
+            'ptag': 'Green',
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 403) 
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.ptitle, 'Test Post')
+        self.assertEqual(self.post.pcontent, 'This is a test post')
+
+<<<<<<< HEAD
+    def test_edit_post_success(self):
+        url = reverse('edit_post', args=[self.group.id, self.post.id])
+        data = {
+            'ptitle': 'Updated Post Title',
+            'pcontent': 'Updated post content',
+            'ptag': 'Blue',
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)  
+        self.post.refresh_from_db()
+        self.assertEqual(self.post.ptitle, 'Updated Post Title')
+        self.assertEqual(self.post.pcontent, 'Updated post content')
+        self.assertEqual(self.post.ptag, 'Blue')
+    
+    def test_edit_post_fail_missing_fields(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('edit_post', args=[self.group.id, self.post.id]), {
+            'ptitle': '', 
+            'pcontent': '',  
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "All fields are required.")
+        self.post.refresh_from_db()
+        self.assertNotEqual(self.post.ptitle, '')
+        self.assertNotEqual(self.post.pcontent, '')
 
 
+
+=======
+>>>>>>> 1b5f49c573b4584726792d7de1eb5199909a8485
 
 # ERROR TEST
 class AddMemberTestCase(TestCase):
@@ -492,4 +540,3 @@ class RemoveMemberTestCase(TestCase):
         self.assertIn('Selected members have been removed.', messages)
 
         self.assertNotIn(self.user_member, self.group.gmembers.all())
-
