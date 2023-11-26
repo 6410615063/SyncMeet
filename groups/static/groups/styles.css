@@ -342,8 +342,9 @@ img {
   color: #483d8e;
 }
 
-th.slot {
+.slot {
   padding: 0px;
+  height: 40px;
 }
 
 .slot_busy {

@@ -57,7 +57,22 @@
                 <th> {{time}} </th>
                 {% endfor %}
             </tr>
+            {% for row in table %}
             <tr>
+                {% for col in row %}
+                <th style="padding: 0px; height: 40px;">
+                    {% if col == 0 %}    
+                    {% elif col >= 1 %}
+                        <div class="slot_busy">
+                        </div>
+                    {% else %}
+                        {{col}}
+                    {% endif %}
+                </th>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            <!-- <tr>
                 <th> Sunday </th>
                 {% for slot in slot_sunday %}
                 <th class="slot">
@@ -133,7 +148,7 @@
                     {% endif %}
                     </th>
                     {% endfor %}
-            </tr>
+            </tr> -->
         </table>
 
         <a href="{% url 'edit_schedule' %}" class="btn btn-primary"> Edit </a>
