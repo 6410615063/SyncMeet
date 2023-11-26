@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 from mainPage.models import Activity
+from user.models import UserInfo
 from django.db.utils import IntegrityError
 import datetime
 import time
@@ -123,30 +124,63 @@ class UserScheduleTest(TestCase):
 
     def test_editSchedule_add_activity(self):
         c = Client()
-        user = User.objects.create_user(username='test6', password='12345')
+        self.user = User.objects.create_user(username='test6', password='12345')
+        self.user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
         c.login(username='test6', password='12345')
         response = c.post(reverse('edit_schedule'), {'start_day': 'Monday', 'start_time': '10:30',
                                                      'end_day': 'Friday', 'end_time': '10:30'})
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Activity.objects.filter(
-            user=user, start_day='Monday', end_day='Friday'))
+            user=self.user, start_day='Monday', end_day='Friday'))
 
     def test_editSchedule_incomplete_form(self):
         c = Client()
-        user = User.objects.create_user(username='test6', password='12345')
+        self.user = User.objects.create_user(username='test6', password='12345')
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
         c.login(username='test6', password='12345')
         self.assertRaises(IntegrityError, c.post, reverse('edit_schedule'), {'start_day': 'Monday',
                                                                              'end_day': 'Friday'})
 
     def test_editSchedule_delete_activity(self):
         c = Client()
-        user = User.objects.create_user(username='test6', password='12345')
+        self.user = User.objects.create_user(username='test6', password='12345')
+        user_info = UserInfo.objects.create(
+            user_id=self.user,
+            account_UID=123456, 
+            profile_image='path/to/profile/image.jpg',
+            prefix_phone_number='+66',
+            phone_number='123456789',
+            sir_name='Test Name',
+            gender='testgender',
+            age=20,
+            contact='https://testcontact.com'
+        )
         c.login(username='test6', password='12345')
         response = c.post(reverse('edit_schedule'), {'start_day': 'Monday', 'start_time': '10:30',
                                                      'end_day': 'Friday', 'end_time': '10:30'})
-        id = Activity.objects.filter(user=user).first().activityId
+        id = Activity.objects.filter(user=self.user).first().activityId
         response = c.get('/schedule/edit_schedule/' + str(id) + '/remove')
         # response = c.get('/schedule')
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Activity.objects.filter(
-            user=user, start_day='Monday', end_day='Friday'))
+            user=self.user, start_day='Monday', end_day='Friday'))
