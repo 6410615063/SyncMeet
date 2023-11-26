@@ -93,11 +93,15 @@
                         <div>
                             <div class="d-flex">
                                 <div class="user-details">
-                                    {% if user_info.profile_image %}
-                                    <img src="{{ user_info.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 80px; height: 80px;">
-                                    {% else %}
-                                    <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 80px; height: 80px;">
-                                    {% endif %}
+                                    {% for member_info in members_info %}
+                                        {% if member_info.user_id.username == post.pauthor.username %}
+                                            {% if member_info.profile_image %}
+                                                <img src="{{ member_info.profile_image.url }}" alt="Profile Image" style="display: block; margin: 0 auto; width: 80px; height: 80px;">
+                                            {% else %}
+                                                <img class="user-avatar-content" src="{% static 'groups/default_avatar.jpg' %}" style="width: 80px; height: 80px;">
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                                 <div>
                                     <h5>{{ post.pauthor.username }}</h5>

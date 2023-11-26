@@ -53,37 +53,39 @@ def group_schedule(request, group_id):
                                                           }
                   )
 
+
 def group_schedule_by_day(request, group_id, day_name):
     timeRange = [str(hour) + ":00" for hour in range(24)]
     day_number = getDayNumber(day_name)
 
-    #get group from id
+    # get group from id
     group = get_object_or_404(Group, id=group_id)
     group_activities = Activity.objects.none()
-    
+
     table = []
-    #make list of all members
-    members = group.gmembers.all();
+    # make list of all members
+    members = group.gmembers.all()
     for member in members:
-        #add username to the first col of each row in table
+        # add username to the first col of each row in table
         row = [member.username]
 
-        #get table slot from activity
+        # get table slot from activity
         activity = Activity.objects.filter(user=member)
         table_slot = getTableSlot(activity)
 
-        #only append the chosen day's table slot into row
+        # only append the chosen day's table slot into row
         chosen_slot = table_slot[day_number]
         for slot in chosen_slot:
             row.append(slot)
 
         table.append(row)
     return render(request, 'groups/group_schedule_by_day.html', {'group': group,
-                                                        'timeRange': timeRange,
-                                                        'day_name': day_name,
-                                                        'table': table,
-                                                        }
-                                                        )
+                                                                 'timeRange': timeRange,
+                                                                 'day_name': day_name,
+                                                                 'table': table,
+                                                                 }
+                  )
+
 
 def group_members(request, group_id):
     user = User.objects.get(username=request.user.username)
@@ -92,7 +94,16 @@ def group_members(request, group_id):
     group = get_object_or_404(Group, id=group_id)
     members = group.gmembers.all()
 
-    return render(request, 'groups/group_members.html', {'group': group, 'members': members, 'user_info': user_info})
+    members_info = []  # เก็บข้อมูล UserInfo ของสมาชิกแต่ละคน
+    for member in members:
+        # ดึงข้อมูล UserInfo ที่ user_id เท่ากับ username ของสมาชิกแต่ละคนใน members
+        try:
+            member_info = UserInfo.objects.get(user_id=member)
+            members_info.append(member_info)
+        except UserInfo.DoesNotExist:
+            pass
+
+    return render(request, 'groups/group_members.html', {'group': group, 'members': members, 'members_info': members_info, 'user_info': user_info})
 
 
 def leave_group(request, group_id):
@@ -145,9 +156,20 @@ def post(request, group_id):
     tag_filter = request.GET.get('ptag', '')
 
     group = get_object_or_404(Group, id=group_id)
+    members = group.gmembers.all()
+
+    members_info = []  # เก็บข้อมูล UserInfo ของสมาชิกแต่ละคน
+    for member in members:
+        # ดึงข้อมูล UserInfo ที่ user_id เท่ากับ username ของสมาชิกแต่ละคนใน members
+        try:
+            member_info = UserInfo.objects.get(user_id=member)
+            members_info.append(member_info)
+        except UserInfo.DoesNotExist:
+            pass
+
     posts = Post.objects.filter(
         pgroup_id=group_id, ptag__icontains=tag_filter).order_by('-pcreated_on')
-    return render(request, 'groups/post.html', {'posts': posts, 'POST_TAG': POST_TAG, 'group': group, 'user_info' : user_info})
+    return render(request, 'groups/post.html', {'posts': posts, 'POST_TAG': POST_TAG, 'group': group, 'members_info': members_info, 'user_info': user_info})
 
 
 def create_post(request, group_id):
