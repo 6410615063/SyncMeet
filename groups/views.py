@@ -232,43 +232,22 @@ def delete_post(request, group_id):
 
     return redirect('post', group_id=group_id)
 
-
-# def remove_member(request, group_id):
-#    group = get_object_or_404(Group, id=group_id)
-#    gmembers = group.gmembers.all()
-#    if request.method == 'POST':
-#        selected_members = request.POST.getlist('selected_members')
-#
-#        for member_id in selected_members:
-#            try:
-#                user = User.objects.get(id=member_id)
-#                group.gmembers.remove(user)
-#            except User.DoesNotExist:
-#                pass
-#
-#        messages.success(request, "Selected members have been removed.")
-#        return redirect('group_members', group_id=group_id)
-#
-#    return render(request, 'groups/remove_member.html', {'group': group})
-
 def remove_member(request, group_id):
     user = User.objects.get(username=request.user.username)
     user_info = UserInfo.objects.get(user_id=user)
-
     group = get_object_or_404(Group, id=group_id)
-    members = group.gmembers.all()
+    members = group.gmembers.exclude(id=user.id)
 
-    if request.method == 'POST':
-        selected_members = request.POST.getlist('selected_members')
+    if user == group.gcreator:
+        if request.method == 'POST':
+            member = request.POST.getlist('member')
 
-        for member_id in selected_members:
-            member_to_remove = get_object_or_404(User, id=member_id)
-            group.gmembers.remove(member_to_remove)
-            messages.success(request, "Selected members have been removed.")
+            for member_id in member:
+                member_to_remove = get_object_or_404(User, id=member_id)
+                group.gmembers.remove(member_to_remove)
+                messages.success(request, "Selected members have been removed.")
 
-        return render(request, 'groups/remove_member.html', {'group': group, 'members': members})
-
-    return render(request, 'groups/remove_member.html', {'group': group, 'members': members, 'user_info': user_info})
+        return render(request, 'groups/remove_member.html', {'group': group, 'members': members, 'user_info': user_info})
 
 
 @login_required
