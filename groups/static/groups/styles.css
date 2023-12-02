@@ -144,8 +144,115 @@ img {
   grid-template-columns: auto auto auto;
 }
 
-.group-content {
+.group-content[data-tag="Untitled"] {
   background-color: #483d8e;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+.group-content[data-tag="Education"] {
+  background-color: #AE9CF4;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Travel"] {
+  background-color: #F49D9D;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Work"] {
+  background-color: #98e698;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Sports"] {
+  background-color: #e7d95c;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Food"] {
+  background-color: #e1c2d9;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Reading"] {
+  background-color: #50dbba;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Art"] {
+  background-color: #74B1DD;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Pets"] {
+  background-color: #C6A56E;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Movies"] {
+  background-color: #b28491;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Music"] {
+  background-color: #56957E;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Health"] {
+  background-color: rgb(104, 144, 175);
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.group-content[data-tag="Technology"] {
+  background-color: rgb(77, 128, 105);
   color: #ffffff;
   margin: 1.5rem;
   border-radius: 20px;
@@ -220,8 +327,116 @@ img {
   grid-template-columns: auto auto auto;
 }
 
-.post-content {
+.post-content[post-tag="Untitled"] {
   background-color: #483d8e;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Education"] {
+  background-color: #AE9CF4;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Travel"] {
+  background-color: #F49D9D;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Work"] {
+  background-color: #98e698;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Sports"] {
+  background-color: #e7d95c;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Food"] {
+  background-color: #e1c2d9;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Reading"] {
+  background-color: #50dbba;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Art"] {
+  background-color: #74B1DD;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Pets"] {
+  background-color: #C6A56E;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Movies"] {
+  background-color: #b28491;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Music"] {
+  background-color: #56957E;
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Health"] {
+  background-color: rgb(104, 144, 175);
+  color: #ffffff;
+  margin: 1.5rem;
+  border-radius: 20px;
+  padding: 1rem;
+  width: 350px;
+}
+
+.post-content[post-tag="Technology"] {
+  background-color: rgb(77, 128, 105);
   color: #ffffff;
   margin: 1.5rem;
   border-radius: 20px;
